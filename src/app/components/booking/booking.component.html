@@ -1,6 +1,15 @@
 <p>booking works!</p>
 
-<form>
+<form [formGroup]="bookingFormGroup">
+  <p-dropdown
+    [loading]="legalServicesDropdown.length === 0"
+    placeholder="Seleziona un servizio"
+    formControlName="legalService"
+    optionLabel="name"
+    [options]="legalServicesDropdown"
+    (onChange)="onLegalServiceSelected($event)"
+  />
+
   <p-calendar (onSelect)="onDateSelect($event)"></p-calendar>
 </form>
 
