@@ -10,6 +10,15 @@
     (onChange)="onLegalServiceSelected($event)"
   />
 
-  <p-calendar (onSelect)="onDateSelect($event)"></p-calendar>
+  <p-calendar (onSelect)="onDateSelect($event)"
+              placeholder="Seleziona una data"
+              showOtherMonths="false"
+              showIcon="true"
+              showButtonBar="true"
+              dateFormat="dd/mm/yy"
+              [firstDayOfWeek]="1"
+              [minDate]="minDate"
+              [maxDate]="maxDate">
+  </p-calendar>
 </form>
 

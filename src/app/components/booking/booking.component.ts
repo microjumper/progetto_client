@@ -24,6 +24,9 @@ export class BookingComponent {
   bookingFormGroup: FormGroup;
   legalServicesDropdown: LegalService[] = [];
 
+  minDate: Date = new Date();
+  maxDate: Date = new Date(new Date().setMonth(new Date().getMonth() + 3))
+
   constructor(private dataService: DataService) {
     this.bookingFormGroup = new FormGroup({
       legalService: new FormControl(null)
