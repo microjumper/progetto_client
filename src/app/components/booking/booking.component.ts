@@ -5,7 +5,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
 
 import { DataService } from "../../services/data/data.service";
-import { LegalService } from "../../types/legalService.type";
+import { LegalService } from "../../../../progetto_shared/legalService.type";
 
 @Component({
   selector: 'app-booking',

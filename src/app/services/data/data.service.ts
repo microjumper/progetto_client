@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 
 import { Observable } from "rxjs";
 
-import { LegalService } from "../../types/legalService.type";
+import { LegalService } from "../../../../progetto_shared/legalService.type";
 
 @Injectable({
   providedIn: 'root'
