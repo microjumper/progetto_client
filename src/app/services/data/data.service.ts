@@ -14,6 +14,6 @@ export class DataService {
 
   getLegalServices(): Observable<LegalService[]>
   {
-    return this.httpClient.get<LegalService[]>('http://localhost:7071/api/Getter');
+    return this.httpClient.get<LegalService[]>('http://localhost:7071/api/legalservices/all');
   }
 }
