@@ -56,6 +56,8 @@ export class BookingComponent implements OnInit {
       stickyHeaderDates: true,
       stickyFooterScrollbar: true,
       height: 'auto',
+      slotMinTime: '08:30',
+      slotMaxTime: '18:30',
       initialView: 'timeGridWeek',
       nowIndicator: true,
       selectable: true,
@@ -94,7 +96,7 @@ export class BookingComponent implements OnInit {
   private handleClick(clickInfo: EventClickArg) {
     clickInfo.jsEvent.preventDefault();
 
-    console.log(clickInfo.event);
+    const event = clickInfo.event;
   }
 
   onLegalServiceSelected(event: { originalEvent: Event, value: any }): void
