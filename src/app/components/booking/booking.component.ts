@@ -12,7 +12,6 @@ import itLocale from '@fullcalendar/core/locales/it';
 import { DataService } from "../../services/data/data.service";
 import { LegalService } from "../../../../progetto_shared/legalService.type";
 import { BookingService } from "../../services/booking/booking.service";
-import { OverlayPanel, OverlayPanelModule } from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-booking',
@@ -20,7 +19,6 @@ import { OverlayPanel, OverlayPanelModule } from "primeng/overlaypanel";
   imports: [
     DropdownModule,
     FullCalendarModule,
-    OverlayPanelModule,
   ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss'
@@ -28,7 +26,6 @@ import { OverlayPanel, OverlayPanelModule } from "primeng/overlaypanel";
 export class BookingComponent implements OnInit {
 
   @ViewChild(FullCalendarComponent) calendarComponent: FullCalendarComponent | undefined;
-  @ViewChild(OverlayPanel) overlayPanel: OverlayPanel | undefined;
 
   calendarOptions: CalendarOptions | undefined;
   legalServicesDropdown: LegalService[] = [];
@@ -99,13 +96,7 @@ export class BookingComponent implements OnInit {
   private handleClick(clickInfo: EventClickArg) {
     clickInfo.jsEvent.preventDefault();
 
-    this.overlayPanel?.toggle(clickInfo.jsEvent, clickInfo.el)
-
     const event = clickInfo.event;
-    const appointment = event.extendedProps['appointment'];
-    if(!appointment) {
-      this.book(event);
-    }
   }
 
   onLegalServiceSelected(event: { originalEvent: Event, value: any }): void
@@ -116,13 +107,5 @@ export class BookingComponent implements OnInit {
       calendar.removeAllEvents();
       calendar.addEventSource(`http://localhost:7071/api/events/legal-service/${event.value.id}`);
     }
-  }
-
-  private book(event: EventApi): void {
-    const appointment = {
-      user: "test",
-    };
-    event.setExtendedProp('appointment', appointment);
-    event.setProp('backgroundColor', '#F44336');
   }
 }
