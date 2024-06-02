@@ -1,15 +1,9 @@
 <div class="container">
-  <div class="dropdown-container">
-    <p-dropdown
-      [loading]="legalServicesDropdown.length === 0"
-      placeholder="Seleziona un servizio"
-      optionLabel="title"
-      [options]="legalServicesDropdown"
-      (onChange)="onLegalServiceSelected($event)"
-    />
-  </div>
+  <p-card>
+    <p-steps [model]="items" [readonly]="true"/>
+  </p-card>
 
-  <div class="calendar-container">
-    <full-calendar [options]="calendarOptions"></full-calendar>
-  </div>
+  <p-card>
+    <router-outlet></router-outlet>
+  </p-card>
 </div>

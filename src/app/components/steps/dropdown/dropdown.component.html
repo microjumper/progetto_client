@@ -1,0 +1,9 @@
+<div class="container">
+  <p-dropdown
+    [loading]="legalServicesDropdown.length === 0"
+    placeholder="Seleziona un servizio"
+    optionLabel="title"
+    [options]="legalServicesDropdown"
+    (onChange)="onLegalServiceSelected($event)"
+  />
+</div>

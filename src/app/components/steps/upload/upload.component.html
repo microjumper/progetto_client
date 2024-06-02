@@ -1,0 +1,15 @@
+<div class="container">
+  <p-fileUpload
+    name="documents[]"
+    url="https://www.primefaces.org/cdn/api/upload.php"
+    (onUpload)="onUpload($event)"
+    [multiple]="true"
+    accept=".pdf"
+    maxFileSize="1000000"
+    fileLimit="3"
+    mode="advanced"
+    chooseLabel="Allega"
+    uploadLabel="Invia"
+    cancelLabel="Annulla">
+  </p-fileUpload>
+</div>

@@ -1,111 +1,39 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { DropdownModule } from "primeng/dropdown";
-
-import { FullCalendarComponent, FullCalendarModule } from "@fullcalendar/angular";
-import { CalendarOptions, EventApi, EventClickArg } from "@fullcalendar/core";
-import interactionPlugin from '@fullcalendar/interaction';
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from '@fullcalendar/timegrid'
-import itLocale from '@fullcalendar/core/locales/it';
-
-import { DataService } from "../../services/data/data.service";
-import { LegalService } from "../../../../progetto_shared/legalService.type";
-import { BookingService } from "../../services/booking/booking.service";
+import { StepsModule } from "primeng/steps";
+import { MenuItem } from "primeng/api";
+import { CardModule } from "primeng/card";
 
 @Component({
   selector: 'app-booking',
   standalone: true,
   imports: [
-    DropdownModule,
-    FullCalendarModule,
+    StepsModule,
+    CardModule,
   ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss'
 })
 export class BookingComponent implements OnInit {
 
-  @ViewChild(FullCalendarComponent) calendarComponent: FullCalendarComponent | undefined;
+  items: MenuItem[] | undefined;
 
-  calendarOptions: CalendarOptions | undefined;
-  legalServicesDropdown: LegalService[] = [];
-
-  constructor(private dataService: DataService, private bookingService: BookingService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.getLegalServices();
-
-    this.initCalendar();
-  }
-
-  private getLegalServices(): void
-  {
-    this.dataService.getLegalServices().subscribe({
-      next: (data: LegalService[]) => {
-        this.legalServicesDropdown = data;
+    this.items = [
+      {
+        label: 'Seleziona un servizio',
+        routerLink: 'service'
       },
-      error: (err) => {
-        console.error(err.message);
+      {
+        label: 'Seleziona un appuntamento',
+        routerLink: 'date'
+      },
+      {
+        label: 'Allega dei documenti (opzionale)',
+        routerLink: 'upload'
       }
-    });
-  }
-
-  private initCalendar(): void {
-    this.calendarOptions = {
-      locale: itLocale,
-      stickyHeaderDates: true,
-      stickyFooterScrollbar: true,
-      height: 'auto',
-      slotMinTime: '08:30',
-      slotMaxTime: '18:30',
-      initialView: 'timeGridWeek',
-      nowIndicator: true,
-      selectable: true,
-      editable: false,
-      droppable: false,
-      allDaySlot: false,
-      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      headerToolbar: {
-        left: 'prev,next,today',
-        center: 'title',
-        right: 'timeGridWeek,dayGridMonth'
-      },
-      views: {
-        timeGridWeek: {
-          type: 'timeGrid',
-          duration: { weeks: 1 }
-        },
-        timeGridDay: {
-          type: 'timeGrid',
-          duration: { days: 1 }
-        },
-      },
-      lazyFetching: true,
-      eventDataTransform: eventData => {
-        for (let prop in eventData) {
-          if (eventData[prop] === null) {
-            delete eventData[prop];
-          }
-        }
-        return eventData;
-      },
-      eventClick: clickInfo => this.handleClick(clickInfo), // click on an event
-    };
-  }
-
-  private handleClick(clickInfo: EventClickArg) {
-    clickInfo.jsEvent.preventDefault();
-
-    const event = clickInfo.event;
-  }
-
-  onLegalServiceSelected(event: { originalEvent: Event, value: any }): void
-  {
-    const calendar = this.calendarComponent?.getApi();
-    if(calendar) {
-      calendar.removeAllEventSources();
-      calendar.removeAllEvents();
-      calendar.addEventSource(`http://localhost:7071/api/events/legal-service/${event.value.id}`);
-    }
+    ];
   }
 }
