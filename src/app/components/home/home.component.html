@@ -1,1 +1,46 @@
-<p>home works!</p>
+<div class="container">
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <p class="brand">Studio Legale</p>
+    </div>
+    <div class="p-toolbar-group-end">
+      <p-menu #menu [model]="items" [popup]="true"></p-menu>
+      <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-user"></button>
+    </div>
+  </p-toolbar>
+
+  <p-carousel
+    [numVisible]="1"
+    [circular]="true"
+    [value]="images"
+    showNavigators="false"
+    showIndicators="false"
+    autoplayInterval="3000">
+    <ng-template pTemplate="item" let-image>
+      <img class="carousel-image" [ngSrc]="image.source" [alt]="image.alt" width="960" height="540">
+    </ng-template>
+  </p-carousel>
+
+  <div class="service-container">
+    <section id="service">
+      <h2>I nostri servizi</h2>
+      <div class="service">
+        <h3>Consulenza fiscale</h3>
+        <p>Assistenza nella gestione delle imposte, pianificazione fiscale e risoluzione di controversie con l'Agenzia delle Entrate.</p>
+      </div>
+      <div class="service">
+        <h3>Procedimento civile</h3>
+        <p>Rappresentanza in controversie contrattuali, recupero crediti e cause di risarcimento danni con un approccio personalizzato.</p>
+      </div>
+      <div class="service">
+        <h3>Procedimento penale</h3>
+        <p>Difesa in ambito penale per reati economici, contro la persona e il patrimonio, con consulenza legale mirata.</p>
+      </div>
+    </section>
+
+    <div class="button-container">
+      <button #button pButton type="button" class="p-button-primary p-button-raised" label="Richiedi un appuntamento"
+              (click)="button.blur();"></button>
+    </div>
+  </div>
+</div>
