@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { StepsModule } from "primeng/steps";
 import { MenuItem } from "primeng/api";
@@ -14,13 +14,11 @@ import { CardModule } from "primeng/card";
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss'
 })
-export class BookingComponent implements OnInit {
+export class BookingComponent {
 
-  items: MenuItem[] | undefined;
+  items: MenuItem[];
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
     this.items = [
       {
         label: 'Seleziona un servizio',
@@ -34,6 +32,6 @@ export class BookingComponent implements OnInit {
         label: 'Allega dei documenti (opzionale)',
         routerLink: 'upload'
       }
-    ];
+    ]
   }
 }

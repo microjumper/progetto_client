@@ -2,17 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { DropdownModule } from "primeng/dropdown";
+import { CardModule } from "primeng/card";
 
 import { LegalService } from "../../../../../progetto_shared/legalService.type";
 import { DataService } from "../../../services/data/data.service";
 import { BookingService } from "../../../services/booking/booking.service";
 
+
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-    imports: [
-        DropdownModule
-    ],
+  imports: [
+    DropdownModule,
+    CardModule
+  ],
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss'
 })

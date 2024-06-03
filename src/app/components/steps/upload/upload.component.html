@@ -1,15 +1,46 @@
 <div class="container">
-  <p-fileUpload
-    name="documents[]"
-    url="https://www.primefaces.org/cdn/api/upload.php"
-    (onUpload)="onUpload($event)"
-    [multiple]="true"
-    accept=".pdf"
-    maxFileSize="1000000"
-    fileLimit="3"
-    mode="advanced"
-    chooseLabel="Allega"
-    uploadLabel="Invia"
-    cancelLabel="Annulla">
-  </p-fileUpload>
+  <p-card>
+    <p-fileUpload
+      name="documents[]"
+      [url]="uploadUrl"
+      (onSend)="onSend($event)"
+      (onUpload)="onUpload($event)"
+      (onError)="onError($event)"
+      [multiple]="true"
+      accept=".pdf"
+      maxFileSize="1000000"
+      fileLimit="3"
+      mode="advanced"
+      method="post"
+      chooseLabel="Allega"
+      chooseStyleClass="p-button-raised"
+      uploadLabel="Invia"
+      uploadStyleClass="p-button-raised p-button-info"
+      cancelLabel="Annulla"
+      cancelStyleClass="p-button-raised p-button-danger"
+      removeStyleClass="p-button-raised p-button-warning">
+      <ng-template pTemplate="content">
+        <ng-container *ngIf="uploadedFiles.length">
+          <div *ngFor="let file of uploadedFiles" class="uploaded-container">
+            <div class="uploaded-content">
+              <p>
+                <i class="pi pi-check" [style]="{ color: 'var(--green-500)' }">&nbsp;</i>{{ file.name }}
+              </p>
+              <p>{{ file.size }} bytes</p>
+              <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-raised"
+                      #deleteButton (click)="deleteFile(file); deleteButton.blur();">
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </ng-template>
+    </p-fileUpload>
+
+    <ng-template pTemplate="footer">
+      <div class="footer">
+        <button #bookButton pButton type="button" class="p-button-info p-button-raised" label="Prenota"
+                (click)="bookButton.blur();"></button>
+      </div>
+    </ng-template>
+  </p-card>
 </div>

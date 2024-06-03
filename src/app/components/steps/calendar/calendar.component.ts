@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 
+import { CardModule } from "primeng/card";
+
 import { FullCalendarComponent, FullCalendarModule } from "@fullcalendar/angular";
 import { CalendarOptions, EventClickArg } from "@fullcalendar/core";
 import interactionPlugin from '@fullcalendar/interaction';
@@ -16,7 +18,8 @@ import { BookingService } from "../../../services/booking/booking.service";
   selector: 'app-calendar',
   standalone: true,
   imports: [
-    FullCalendarModule
+    FullCalendarModule,
+    CardModule
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
