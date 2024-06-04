@@ -38,6 +38,9 @@
 
     <ng-template pTemplate="footer">
       <div class="footer">
+        <button #backButton pButton type="button" class="p-button-info p-button-raised" label="Indietro"
+                (click)="onBack(); backButton.blur();" routerLink="/booking/date"></button>
+
         <button #bookButton pButton type="button" class="p-button-success p-button-raised" label="Prenota"
                 (click)="bookButton.blur();"></button>
       </div>

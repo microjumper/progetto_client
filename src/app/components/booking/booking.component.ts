@@ -1,8 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { StepsModule } from "primeng/steps";
 import { MenuItem } from "primeng/api";
 import { CardModule } from "primeng/card";
+import { BreadcrumbModule } from "primeng/breadcrumb";
+
+import { filter, Subscription } from "rxjs";
+
+import { BookingService } from "../../services/booking/booking.service";
+import { Appointment } from "../../../../progetto_shared/appointment.type";
 
 @Component({
   selector: 'app-booking',
@@ -10,16 +16,19 @@ import { CardModule } from "primeng/card";
   imports: [
     StepsModule,
     CardModule,
+    BreadcrumbModule,
   ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss'
 })
-export class BookingComponent {
+export class BookingComponent implements OnInit, OnDestroy {
 
-  items: MenuItem[];
+  steps: MenuItem[];
+  breadcrumbs: MenuItem[];
+  subscriptions: Subscription[] = [];
 
-  constructor() {
-    this.items = [
+  constructor(private bookingService: BookingService) {
+    this.steps = [
       {
         label: 'Seleziona un servizio',
         routerLink: 'service'
@@ -32,6 +41,46 @@ export class BookingComponent {
         label: 'Allega dei documenti (opzionale)',
         routerLink: 'upload'
       }
-    ]
+    ];
+
+    this.breadcrumbs = [];
+  }
+
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.bookingService.appointment$.subscribe({
+        next: appointment => {
+          if(appointment) {
+            this.breadcrumbs = [this.breadcrumbs[0]];
+            this.breadcrumbs.push({ label: appointment.legalServiceTitle });
+            if(appointment.eventDate) {
+              const localizedDate = new Date(appointment.eventDate).toLocaleString('it-IT', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              this.breadcrumbs.push({ label: localizedDate });
+              this.breadcrumbs.push({ label: '' });
+            }
+            else {
+              this.breadcrumbs.push({ label: '' });
+            }
+          }
+          else {
+            this.breadcrumbs = [
+              { icon: 'pi pi-calendar' },
+              { label: '' }
+            ];
+          }
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

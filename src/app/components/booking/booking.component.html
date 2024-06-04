@@ -1,7 +1,11 @@
 <div class="container">
   <p-card>
-    <p-steps [model]="items" [readonly]="true"/>
+    <p-steps [model]="steps" [readonly]="true"/>
   </p-card>
+
+  <div class="breadcrumb">
+    <p-breadcrumb [model]="breadcrumbs"/>
+  </div>
 
   <router-outlet></router-outlet>
 </div>

@@ -14,6 +14,7 @@ import itLocale from '@fullcalendar/core/locales/it';
 import { filter, Subscription } from "rxjs";
 
 import { BookingService } from "../../../services/booking/booking.service";
+import { Appointment } from "../../../../../progetto_shared/appointment.type";
 
 @Component({
   selector: 'app-calendar',
@@ -92,15 +93,20 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     clickInfo.jsEvent.preventDefault();
 
     const event = clickInfo.event;
+
+    const currentAppointment = this.bookingService.appointment$.getValue();
+    this.bookingService.appointment$.next({...currentAppointment!, eventDate: event.start?.toISOString()});
+
+    this.router.navigate(['booking', 'upload']);
   }
 
   private loadEvents(): void {
-    this.subscription = this.bookingService.legalServiceId.pipe(
-      filter(legalServiceId => !!legalServiceId)) // filters empty strings
-      .subscribe({
-      next: (legalServiceId: string) => {
+    this.subscription = this.bookingService.appointment$.pipe(
+      filter(appointment => !!appointment &&!!appointment.legalServiceId), // filters null values
+    ).subscribe({
+      next: (appointment: Appointment | null) => {
         const calendar = this.calendarComponent?.getApi();
-        calendar?.addEventSource(`http://localhost:7071/api/events/legal-service/${legalServiceId}`);
+        calendar?.addEventSource(`http://localhost:7071/api/events/legal-service/${appointment!.legalServiceId}`);
       },
       error: (error) => {
         console.error(error.message);
@@ -108,6 +114,10 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate(['booking']);
       }
     });
+  }
+
+  onBack(): void {
+    this.bookingService.appointment$.next(null);
   }
 
   ngOnDestroy(): void {

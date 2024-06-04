@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { EventApi } from "@fullcalendar/core";
+import { Appointment } from "../../../../progetto_shared/appointment.type";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
 
-  legalServiceId: Subject<string> = new BehaviorSubject<string>("");
+  appointment$ = new BehaviorSubject<Appointment | null>(null);
 
   constructor(private httpClient: HttpClient) { }
 

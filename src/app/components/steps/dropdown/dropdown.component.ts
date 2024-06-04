@@ -43,7 +43,7 @@ export class DropdownComponent implements OnInit {
 
   onLegalServiceSelected(event: { originalEvent: Event, value: any }): void
   {
-    this.bookingService.legalServiceId.next(event.value.id);
+    this.bookingService.appointment$.next({ legalServiceId: event.value.id, legalServiceTitle: event.value.title });
     this.router.navigate(['booking', 'date']);
   }
 }
