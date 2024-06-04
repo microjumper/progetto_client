@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { JsonPipe, NgForOf, NgIf } from "@angular/common";
+import { NgForOf, NgIf } from "@angular/common";
+import { RouterLink } from "@angular/router";
 
 import { FileUploadEvent, FileUploadModule } from "primeng/fileupload";
 import { CardModule } from "primeng/card";
-import { RouterLink } from "@angular/router";
+
 import { BookingService } from "../../../services/booking/booking.service";
 
 @Component({
@@ -13,7 +14,6 @@ import { BookingService } from "../../../services/booking/booking.service";
         FileUploadModule,
         NgIf,
         NgForOf,
-        JsonPipe,
         CardModule,
         RouterLink
     ],
@@ -25,7 +25,10 @@ export class UploadComponent {
   uploadUrl = "http://localhost:7071/api/documents/upload";
   uploadedFiles: File[] = [];
 
-  constructor(private bookingService: BookingService) {
+  constructor(private bookingService: BookingService) { }
+
+  onBeforeSend(event: { xhr: XMLHttpRequest }) {
+    event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
   }
 
   onSend(event: { originalEvent: object, formData: FormData}) {
@@ -48,5 +51,9 @@ export class UploadComponent {
 
   onBack(): void {
     this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, eventDate: undefined });
+  }
+
+  book(): void {
+
   }
 }
