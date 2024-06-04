@@ -9,23 +9,18 @@
   gap: 8px
 }
 
-.p-toolbar-group-start {
-  padding-left: 12px;
-}
-
-.p-toolbar-group-end {
-  padding-right: 12px;
-}
-
 .brand {
   margin: 0;
 
   font-family: 'Lora', serif;
-  font-size: 2rem;
-  font-weight: 400;
+  font-size: 1.75rem;
+  font-weight: 500;
 
-  letter-spacing: 6px;
+  letter-spacing: 3px;
 
   text-align: center;
   text-transform: uppercase;
+
+  cursor: pointer;
+  user-select: none;
 }
