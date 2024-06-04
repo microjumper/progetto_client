@@ -1,13 +1,4 @@
 <div class="container">
-  <p-toolbar>
-    <div class="p-toolbar-group-start">
-      <p class="brand">Studio Legale</p>
-    </div>
-    <div class="p-toolbar-group-end">
-      <p-menu #menu [model]="items" [popup]="true"></p-menu>
-      <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-user"></button>
-    </div>
-  </p-toolbar>
 
   <p-carousel
     [numVisible]="1"
@@ -17,7 +8,7 @@
     showIndicators="false"
     autoplayInterval="3000">
     <ng-template pTemplate="item" let-image>
-      <img class="carousel-image" [ngSrc]="image.source" [alt]="image.alt" width="960" height="540">
+      <img class="carousel-image" [ngSrc]="image.source" [alt]="image.alt" width="960" height="540" priority>
     </ng-template>
   </p-carousel>
 
@@ -40,7 +31,7 @@
 
     <div class="button-container">
       <button #button pButton type="button" class="p-button-primary p-button-raised" label="Richiedi un appuntamento"
-              (click)="button.blur();"></button>
+              (click)="button.blur();" routerLink="booking"></button>
     </div>
   </div>
 </div>

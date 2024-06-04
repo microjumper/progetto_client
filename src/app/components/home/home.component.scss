@@ -4,22 +4,9 @@
 
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
+  justify-content: stretch;
   align-items: stretch;
-  gap: 8px
-}
-
-.brand {
-  margin: 0;
-
-  font-family: 'Lora', serif;
-  font-size: 2rem;
-  font-weight: 400;
-
-  letter-spacing: 6px;
-
-  text-align: center;
-  text-transform: uppercase;
+  gap: 16px
 }
 
 .carousel-image {

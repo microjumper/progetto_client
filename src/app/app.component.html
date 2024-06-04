@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<div class="container">
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <p class="brand">Studio Legale</p>
+    </div>
+    <div class="p-toolbar-group-end">
+      <p-menu #menu [model]="items" [popup]="true"></p-menu>
+      <button pButton type="button"  class="p-button-raised" (click)="menu.toggle($event)" icon="pi pi-user"></button>
+    </div>
+  </p-toolbar>
+
+  <router-outlet></router-outlet>
+</div>

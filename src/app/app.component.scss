@@ -1,0 +1,61 @@
+.container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  gap: 8px
+}
+
+.p-toolbar-group-start {
+  padding-left: 12px;
+}
+
+.p-toolbar-group-end {
+  padding-right: 12px;
+}
+
+.brand {
+  margin: 0;
+
+  font-family: 'Lora', serif;
+  font-size: 2rem;
+  font-weight: 400;
+
+  letter-spacing: 6px;
+
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.footer {
+  padding: 0 24px;
+
+  width: 100%;
+  height: 64px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03), 0 0 2px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.12);
+  p {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    color: #555;
+
+    span {
+      display: block;
+
+      font-size: 1rem;
+
+      letter-spacing: 1.5px;
+    }
+  }
+}
