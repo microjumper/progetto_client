@@ -1,5 +1,17 @@
 <div class="container">
   <p-card>
     <full-calendar [options]="calendarOptions"></full-calendar>
+
+    <ng-template pTemplate="footer">
+      <div class="footer">
+        <button #backButton pButton type="button" class="p-button-info p-button-raised" label="Indietro"
+                (click)="backButton.blur();" routerLink="../"></button>
+        <div>
+          <p>Nessuna data disponibile? La nostra lista di attesa è disponibile, ti contatteremo appena possibile</p>
+          <button #wlButton pButton type="button" class="p-button-text p-button-help p-button-raised" label="Mettiti in lista"
+                  (click)="wlButton.blur();"></button>
+        </div>
+      </div>
+    </ng-template>
   </p-card>
 </div>

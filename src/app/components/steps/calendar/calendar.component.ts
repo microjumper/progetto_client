@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { ButtonDirective } from "primeng/button";
 
 import { CardModule } from "primeng/card";
 
@@ -19,7 +20,9 @@ import { BookingService } from "../../../services/booking/booking.service";
   standalone: true,
   imports: [
     FullCalendarModule,
-    CardModule
+    CardModule,
+    ButtonDirective,
+    RouterLink
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
