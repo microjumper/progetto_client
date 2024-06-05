@@ -4,8 +4,14 @@
       <p class="brand" routerLink="">Studio Legale</p>
     </div>
     <div class="p-toolbar-group-end">
-      <p-menu #menu [model]="items" [popup]="true"></p-menu>
-      <button pButton type="button"  class="p-button-raised" (click)="menu.toggle($event)" icon="pi pi-user"></button>
+      <ng-container *ngIf="!isLogged; else logged">
+        <button pButton label="Entra con Microsoft" icon="pi pi-microsoft" (click)="login()"></button>
+      </ng-container>
+
+      <ng-template #logged>
+        <p-menu #menu [model]="items" [popup]="true"></p-menu>
+        <button pButton type="button" class="p-button-raised" (click)="menu.toggle($event)" icon="pi pi-user"></button>
+      </ng-template>
     </div>
   </p-toolbar>
 

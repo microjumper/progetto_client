@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgOptimizedImage } from "@angular/common";
 import { RouterLink } from "@angular/router";
 
 import { ButtonDirective } from "primeng/button";
@@ -11,7 +10,6 @@ import { CarouselModule } from "primeng/carousel";
   imports: [
     ButtonDirective,
     CarouselModule,
-    NgOptimizedImage,
     RouterLink,
   ],
   templateUrl: './home.component.html',
