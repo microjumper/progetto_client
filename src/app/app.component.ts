@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgIf } from "@angular/common";
 
@@ -8,6 +8,7 @@ import { MenuModule } from "primeng/menu";
 import { ToolbarModule } from "primeng/toolbar";
 
 import { AuthService } from "./services/auth/auth.service";
+import { filter, Subscription } from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -16,46 +17,56 @@ import { AuthService } from "./services/auth/auth.service";
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
-  isLogged: boolean;
-  items: MenuItem[];
+  isLogged = false;
 
-  constructor(private primengConfig: PrimeNGConfig, private authService: AuthService) {
-    this.isLogged = false;
-    this.items = [];
-  }
+  items: MenuItem[] = [
+    {
+      label: 'username',
+      items: [
+        {
+          label: 'Logout',
+          icon: 'pi pi-sign-out',
+          command: () => this.authService.logout()
+        }
+      ]
+    }
+  ];
+
+  private subscription: Subscription | undefined;
+
+  constructor(private primengConfig: PrimeNGConfig, private authService: AuthService) { }
 
   ngOnInit() {
     this.primengConfig.ripple = true;
 
-    this.isLogged = !!this.authService.getActiveAccount();
-
-    this.setupMenu();
+    this.subscription = this.authService.usernameSubject$.pipe(
+      filter(username => !!username)).subscribe({
+      next: (username) => {
+        this.items[0].label = username!;
+        this.isLogged = true;
+      },
+      error: (error) => {
+        console.error(error.message);
+        this.isLogged = false;
+      }
+    })
   }
 
   login() {
     this.authService.loginWithMicrosoft().subscribe({
       next: (response) => {
         this.isLogged = !!this.authService.getActiveAccount();
-        this.setupMenu();
       },
-      error: (error) => console.error(error.message)
+      error: (error) => {
+        console.error(error.message);
+        this.isLogged = false;
+      }
     });
   }
 
-  private setupMenu() {
-    this.items = [
-      {
-        label: this.authService.getActiveAccount()?.username,
-        items: [
-          {
-            label: 'Logout',
-            icon: 'pi pi-sign-out',
-            command: () => this.authService.logout()
-          }
-        ]
-      }
-    ];
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }
