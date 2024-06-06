@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { NgForOf, NgIf } from "@angular/common";
 import { RouterLink } from "@angular/router";
 
-import { FileUploadEvent, FileUploadModule } from "primeng/fileupload";
+import { FileBeforeUploadEvent, FileUploadEvent, FileUploadModule } from "primeng/fileupload";
 import { CardModule } from "primeng/card";
 
 import { BookingService } from "../../../services/booking/booking.service";
+import { AuthService } from "../../../services/auth/auth.service";
+import { filter, Subscription } from "rxjs";
 
 @Component({
   selector: 'app-upload',
@@ -25,10 +27,20 @@ export class UploadComponent {
   uploadUrl = "http://localhost:7071/api/documents/upload";
   uploadedFiles: File[] = [];
 
-  constructor(private bookingService: BookingService) { }
+  constructor(private bookingService: BookingService, private authService: AuthService) { }
 
-  onBeforeSend(event: { xhr: XMLHttpRequest }) {
-    event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+  onBeforeUpload(event: FileBeforeUploadEvent) {
+    const subscription: Subscription = this.authService.getActiveAccount().pipe(
+      filter(account => !!account)).subscribe({
+      next: (account) => {
+        const accountId =  account?.homeAccountId!;
+        const accountEmail = account?.username!;
+        event.formData.append("accountId", accountId);
+        event.formData.append("accountEmail", accountEmail);
+      },
+      error: (error) => console.error(error),
+      complete: () => subscription.unsubscribe()
+    });
   }
 
   onSend(event: { originalEvent: object, formData: FormData}) {

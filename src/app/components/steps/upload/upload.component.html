@@ -3,6 +3,7 @@
     <p-fileUpload
       name="documents[]"
       [url]="uploadUrl"
+      (onBeforeUpload)="onBeforeUpload($event)"
       (onSend)="onSend($event)"
       (onUpload)="onUpload($event)"
       (onError)="onError($event)"
