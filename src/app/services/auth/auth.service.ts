@@ -10,13 +10,12 @@ import { BehaviorSubject, Observable, Subscription, tap } from "rxjs";
 })
 export class AuthService implements OnDestroy {
 
-  usernameSubject$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-
   private subscriptions: Subscription[] = [];
+  private activeAccount$: BehaviorSubject<AccountInfo | null> = new BehaviorSubject<AccountInfo | null>(null);
 
   constructor(private msalService: MsalService, private msalBroadcastService: MsalBroadcastService) {
     this.subscriptions.push(this.msalService.initialize().subscribe({
-      next: () => this.usernameSubject$.next(this.msalService.instance.getActiveAccount()?.username || null),
+      next: () => this.activeAccount$.next(this.msalService.instance.getActiveAccount()),
       error: err => console.error('MsalService initialization failed:', err.message)
     }));
 
@@ -24,15 +23,15 @@ export class AuthService implements OnDestroy {
       next: (event) => {
         if (event.eventType === EventType.LOGIN_SUCCESS) {
           const authenticationResult = event.payload as AuthenticationResult;
-          this.usernameSubject$.next(authenticationResult.account.username);
+          this.activeAccount$.next(authenticationResult.account);
         }
       },
       error: err => console.error('MsalBroadcastService failed:', err.message)
     }));
   }
 
-  getActiveAccount(): AccountInfo | null {
-    return this.msalService.instance.getActiveAccount();
+  getActiveAccount(): Observable<AccountInfo | null> {
+    return this.activeAccount$;
   }
 
   loginWithMicrosoft(): Observable<AuthenticationResult> {
@@ -47,7 +46,7 @@ export class AuthService implements OnDestroy {
     this.msalService.logoutPopup({
       mainWindowRedirectUri: "/"
     });
-    this.usernameSubject$.next(null);
+    this.activeAccount$.next(null);
   }
 
   ngOnDestroy(): void {

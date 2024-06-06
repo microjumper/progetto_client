@@ -41,10 +41,10 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.primengConfig.ripple = true;
 
-    this.subscription = this.authService.usernameSubject$.pipe(
-      filter(username => !!username)).subscribe({
-      next: (username) => {
-        this.items[0].label = username!;
+    this.subscription = this.authService.getActiveAccount().pipe(
+      filter(account => !!account)).subscribe({
+      next: (account) => {
+        this.items[0].label = account?.username;
         this.isLogged = true;
       },
       error: (error) => {
