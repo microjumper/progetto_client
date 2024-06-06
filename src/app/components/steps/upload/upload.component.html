@@ -1,10 +1,9 @@
 <div class="container">
   <p-card>
-    <p-fileUpload
+    <p-fileUpload #uploader
       name="documents[]"
       [url]="uploadUrl"
       (onBeforeUpload)="onBeforeUpload($event)"
-      (onSend)="onSend($event)"
       (onUpload)="onUpload($event)"
       (onError)="onError($event)"
       [multiple]="true"
@@ -20,30 +19,25 @@
       cancelLabel="Annulla"
       cancelStyleClass="p-button-raised p-button-danger"
       removeStyleClass="p-button-raised p-button-warning">
-      <ng-template pTemplate="content">
-        <ng-container *ngIf="uploadedFiles.length">
-          <div *ngFor="let file of uploadedFiles" class="uploaded-container">
-            <div class="uploaded-content">
-              <p>
-                <i class="pi pi-check" [style]="{ color: 'var(--green-500)' }">&nbsp;</i>{{ file.name }}
-              </p>
-              <p>{{ file.size }} bytes</p>
-              <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-raised"
-                      #deleteButton (click)="deleteFile(file); deleteButton.blur();">
-              </button>
-            </div>
+      <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
+        <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+          <div class="flex gap-2">
+            <button #chooseButton pButton type="button" class="p-button-primary p-button-raised" label="Allega" icon="pi pi-plus"
+                    (click)="chooseCallback(); chooseButton.blur();"></button>
+            <p-button icon="pi pi-times" label="Annulla" severity="danger" (onClick)="clearCallback()"
+                      [disabled]="!files || files.length === 0" [raised]="true"/>
           </div>
-        </ng-container>
+        </div>
       </ng-template>
-    </p-fileUpload>
 
+    </p-fileUpload>
     <ng-template pTemplate="footer">
       <div class="footer">
         <button #backButton pButton type="button" class="p-button-info p-button-raised" label="Indietro"
                 (click)="onBack(); backButton.blur();" routerLink="/booking/date"></button>
 
         <button #bookButton pButton type="button" class="p-button-success p-button-raised" label="Prenota"
-                (click)="bookButton.blur();"></button>
+                (click)="uploader.upload(); bookButton.blur();"></button>
       </div>
     </ng-template>
   </p-card>

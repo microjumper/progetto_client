@@ -94,8 +94,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const event = clickInfo.event;
 
-    const currentAppointment = this.bookingService.appointment$.getValue();
-    this.bookingService.appointment$.next({...currentAppointment!, eventDate: event.start?.toISOString()});
+    const currentAppointment = this.bookingService.appointment$.value;
+    this.bookingService.appointment$.next({...currentAppointment, eventDate: event.start?.toISOString()});
 
     this.router.navigate(['booking', 'upload']);
   }
@@ -121,6 +121,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.bookingService.appointment$.next(null);
+
     this.subscription?.unsubscribe();
 
     const calendar = this.calendarComponent?.getApi();

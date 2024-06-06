@@ -22,8 +22,8 @@ export class BookingService {
     return this.httpClient.get<EventApi[]>(`http://localhost:7071/api/events/legal-service/${legalServiceId}`);
   }
 
-  bookAppointment(event: EventApi): Observable<any> {
-    return this.httpClient.post(`XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`, event);
+  bookAppointment(): Observable<Appointment> {
+    return this.httpClient.post<Appointment>('http://localhost:7071/api/appointments/book', this.appointment$.value);
   }
 
   cancelAppointment(event: EventApi): Observable<any> {
