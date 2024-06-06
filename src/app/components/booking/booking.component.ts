@@ -1,14 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { StepsModule } from "primeng/steps";
 import { MenuItem } from "primeng/api";
 import { CardModule } from "primeng/card";
 import { BreadcrumbModule } from "primeng/breadcrumb";
 
-import { filter, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 import { BookingService } from "../../services/booking/booking.service";
-import { Appointment } from "../../../../progetto_shared/appointment.type";
 
 @Component({
   selector: 'app-booking',
@@ -27,7 +26,7 @@ export class BookingComponent implements OnInit, OnDestroy {
   breadcrumbs: MenuItem[];
   subscriptions: Subscription[] = [];
 
-  constructor(private bookingService: BookingService) {
+  constructor(private bookingService: BookingService, private changeDetector: ChangeDetectorRef) {
     this.steps = [
       {
         label: 'Seleziona un servizio',
@@ -75,6 +74,8 @@ export class BookingComponent implements OnInit, OnDestroy {
               { label: '' }
             ];
           }
+
+          this.changeDetector.detectChanges();
         }
       })
     );

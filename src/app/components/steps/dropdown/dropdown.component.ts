@@ -27,6 +27,8 @@ export class DropdownComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLegalServices();
+
+    this.bookingService.appointment$.next(null);
   }
 
   private getLegalServices(): void

@@ -40,6 +40,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.initCalendar();
+
+    this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, eventDate: undefined });
   }
 
   ngAfterViewInit(): void {
@@ -121,8 +123,6 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.bookingService.appointment$.next(null);
-
     this.subscription?.unsubscribe();
 
     const calendar = this.calendarComponent?.getApi();

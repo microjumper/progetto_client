@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgForOf, NgIf } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { HttpResponse } from "@angular/common/http";
 
@@ -17,8 +16,6 @@ import { FileMetadata } from "../../../../../progetto_shared/fileMetadata.type";
   standalone: true,
     imports: [
         FileUploadModule,
-        NgIf,
-        NgForOf,
         CardModule,
         RouterLink
     ],
@@ -65,9 +62,5 @@ export class UploadComponent {
 
   onError(event: any) {
     console.error(event.error.message)
-  }
-
-  onBack(): void {
-    this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, eventDate: undefined });
   }
 }
