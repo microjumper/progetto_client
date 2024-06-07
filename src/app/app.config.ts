@@ -15,6 +15,7 @@ import {
 
 import { routes } from './app.routes';
 import { environment } from "../environments/environment";
+import { ConfirmationService, MessageService } from "primeng/api";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -40,7 +41,9 @@ export const appConfig: ApplicationConfig = {
     },
     MsalService,
     MsalGuard,
-    MsalBroadcastService
+    MsalBroadcastService,
+    MessageService,
+    ConfirmationService
   ]
 };
 

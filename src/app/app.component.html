@@ -17,3 +17,13 @@
 
   <router-outlet></router-outlet>
 </div>
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast />
+  <p-confirmDialog [closable]="false" #cd>
+    <ng-template pTemplate="footer">
+      <button type="button" class="p-button-info" pButton label="NO" raised="true" (click)="cd.reject()"></button>
+      <button type="button" class="p-button-danger" pButton label="SI" raised="true" (click)="cd.accept()"></button>
+    </ng-template>
+  </p-confirmDialog>
+</div>

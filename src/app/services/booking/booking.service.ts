@@ -18,10 +18,6 @@ export class BookingService {
     this.appointment$ = new BehaviorSubject<Appointment | null>(null);
   }
 
-  getEventsByLegalService(legalServiceId: string): Observable<EventApi[]> {
-    return this.httpClient.get<EventApi[]>(`http://localhost:7071/api/events/legal-service/${legalServiceId}`);
-  }
-
   bookAppointment(): Observable<Appointment> {
     return this.httpClient.post<Appointment>('http://localhost:7071/api/appointments/book', this.appointment$.value);
   }

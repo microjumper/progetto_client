@@ -3,6 +3,7 @@
     <p-fileUpload #uploader
       name="documents[]"
       [url]="uploadUrl"
+      (onSelect)="onSelect($event)"
       (onBeforeUpload)="onBeforeUpload($event)"
       (onUpload)="onUpload($event)"
       (onError)="onError($event)"
@@ -37,7 +38,7 @@
                 (click)="backButton.blur();" routerLink="/booking/date"></button>
 
         <button #bookButton pButton type="button" class="p-button-success p-button-raised" label="Prenota"
-                (click)="uploader.upload(); bookButton.blur();"></button>
+                (click)="onBook(uploader); bookButton.blur();"></button>
       </div>
     </ng-template>
   </p-card>

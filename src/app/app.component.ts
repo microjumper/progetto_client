@@ -6,6 +6,8 @@ import { MenuItem, PrimeNGConfig } from "primeng/api";
 import { ButtonDirective } from "primeng/button";
 import { MenuModule } from "primeng/menu";
 import { ToolbarModule } from "primeng/toolbar";
+import { ToastModule } from "primeng/toast";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
 
 import { filter, Subscription } from "rxjs";
 
@@ -14,7 +16,7 @@ import { AuthService } from "./services/auth/auth.service";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonDirective, MenuModule, ToolbarModule, NgIf],
+  imports: [RouterOutlet, ButtonDirective, MenuModule, ToolbarModule, NgIf, ToastModule, ConfirmDialogModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -26,6 +28,16 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       label: 'username',
       items: [
+        {
+          label: 'Home',
+          icon: 'pi pi-home',
+          routerLink: '/'
+        },
+        {
+          label: 'Richiedi un servizio',
+          icon: 'pi pi-calendar-plus',
+          routerLink: '/booking'
+        },
         {
           label: 'I miei appuntamenti',
           icon: 'pi pi-calendar',
