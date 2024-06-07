@@ -7,8 +7,9 @@ import { ButtonDirective } from "primeng/button";
 import { MenuModule } from "primeng/menu";
 import { ToolbarModule } from "primeng/toolbar";
 
-import { AuthService } from "./services/auth/auth.service";
 import { filter, Subscription } from "rxjs";
+
+import { AuthService } from "./services/auth/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,11 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       label: 'username',
       items: [
+        {
+          label: 'I miei appuntamenti',
+          icon: 'pi pi-calendar',
+          routerLink: '/schedule'
+        },
         {
           label: 'Logout',
           icon: 'pi pi-sign-out',

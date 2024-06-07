@@ -12,3 +12,15 @@
 .p-menu { // toolbar menu
   width: 250px;
 }
+
+.p-fieldset-content // appointment container
+{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}

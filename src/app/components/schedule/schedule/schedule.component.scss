@@ -1,0 +1,59 @@
+.schedule {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 640px;
+}
+
+.appointment {
+  padding: 16px;
+
+  width: 600px;
+
+  position: relative;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: flex-start;
+
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0 0 4px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  h6 {
+    margin: 0 0 16px 0;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  span {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 16px;
+  }
+}
+
+.cancelButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  z-index: 10;
+}
+

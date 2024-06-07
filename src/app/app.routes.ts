@@ -7,6 +7,7 @@ import { BookingComponent } from "./components/booking/booking.component";
 import { DropdownComponent } from "./components/steps/dropdown/dropdown.component";
 import { CalendarComponent } from "./components/steps/calendar/calendar.component";
 import { UploadComponent } from "./components/steps/upload/upload.component";
+import { ScheduleComponent } from "./components/schedule/schedule/schedule.component";
 
 import { dateGuard } from "./guards/steps/date/date.guard";
 import { uploadGuard } from "./guards/steps/upload/upload.guard";
@@ -19,6 +20,8 @@ export const routes: Routes = [
       { path: 'date', component: CalendarComponent, canActivate: [dateGuard]},
       { path: 'upload', component: UploadComponent, canActivate: [uploadGuard]},
       { path: '**', redirectTo: 'service' }
-    ]},
+    ]
+  },
+  { path: 'schedule', component: ScheduleComponent, canActivate: [MsalGuard] },
   { path: '**', redirectTo: '' }
 ];
