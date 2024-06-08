@@ -11,12 +11,13 @@ import {
 } from "primeng/fileupload";
 import { CardModule } from "primeng/card";
 
+import { ConfirmationService, MessageService } from "primeng/api";
+
 import { filter, Subscription, switchMap, tap } from "rxjs";
 
 import { BookingService } from "../../../services/booking/booking.service";
 import { AuthService } from "../../../services/auth/auth.service";
 import { FileMetadata } from "../../../../../progetto_shared/fileMetadata.type";
-import { ConfirmationService, MessageService } from "primeng/api";
 
 @Component({
   selector: 'app-upload',
@@ -99,9 +100,9 @@ export class UploadComponent {
     const subscription: Subscription = this.authService.getActiveAccount()
       .pipe(
         filter(account => !!account),
-        tap(account => {
-          this.bookingService.appointment$.next({...this.bookingService.appointment$.value, accountId: account?.homeAccountId!});
-        }),
+        tap(account =>
+          this.bookingService.appointment$.next({...this.bookingService.appointment$.value, accountId: account?.homeAccountId!})
+        ),
         switchMap(account => this.bookingService.bookAppointment())
       ).subscribe({
         next: (appointment) => {

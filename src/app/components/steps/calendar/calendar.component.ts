@@ -96,8 +96,13 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const event = clickInfo.event;
 
+    if(event.extendedProps["appointment"])
+    {
+      return;
+    }
+
     const currentAppointment = this.bookingService.appointment$.value;
-    this.bookingService.appointment$.next({...currentAppointment, eventDate: event.start?.toISOString()});
+    this.bookingService.appointment$.next({...currentAppointment, eventId: event.id, eventDate: event.start?.toISOString()});
 
     this.router.navigate(['booking', 'upload']);
   }
@@ -108,7 +113,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       next: (appointment: Appointment | null) => {
         const calendar = this.calendarComponent?.getApi();
-        calendar?.addEventSource(`http://localhost:7071/api/events/services/${appointment!.legalServiceId}`);
+        calendar?.addEventSource(`http://localhost:7071/api/services/events/${appointment!.legalServiceId}`);
       },
       error: (error) => {
         console.error(error.message);
