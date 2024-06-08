@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 import { StepsModule } from "primeng/steps";
 import { MenuItem } from "primeng/api";
@@ -26,7 +27,7 @@ export class BookingComponent implements OnInit, OnDestroy {
   breadcrumbs: MenuItem[];
   subscriptions: Subscription[] = [];
 
-  constructor(private bookingService: BookingService, private changeDetector: ChangeDetectorRef) {
+  constructor(private bookingService: BookingService, private changeDetector: ChangeDetectorRef, private datePipe: DatePipe) {
     this.steps = [
       {
         label: 'Seleziona un servizio',
@@ -53,15 +54,8 @@ export class BookingComponent implements OnInit, OnDestroy {
             this.breadcrumbs = [this.breadcrumbs[0]];
             this.breadcrumbs.push({ label: appointment.legalServiceTitle });
             if(appointment.eventDate) {
-              const localizedDate = new Date(appointment.eventDate).toLocaleString('it-IT', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-              this.breadcrumbs.push({ label: localizedDate });
+              const localizedDate = this.datePipe.transform(appointment.eventDate, 'fullDate', 'it-IT');
+              this.breadcrumbs.push({ label: localizedDate?.toString() });
               this.breadcrumbs.push({ label: '' });
             }
             else {

@@ -3,8 +3,8 @@
     <p-fieldset legend="I miei appuntamenti">
       <div class="appointment" *ngFor="let appointment of appointments">
         <h2>{{ appointment.legalServiceTitle }}</h2>
-        <h6>{{appointment.eventDate}}</h6>
-        <span *ngFor="let file of appointment.fileMetadata">{{ file.fileName }}</span>
+        <h6>{{appointment.eventDate | date: 'fullDate':'':'it-IT'}}</h6>
+        <span *ngFor="let file of appointment.fileMetadata">{{ file.originalFileName }}</span>
         <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelAppointment(appointment.id!); cancelButton.blur();"
                 class="cancelButton p-button-danger p-button-raised p-button-rounded">
         </button>

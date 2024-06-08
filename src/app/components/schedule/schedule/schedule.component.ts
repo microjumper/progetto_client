@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
-import { NgForOf } from "@angular/common";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DatePipe, NgForOf } from "@angular/common";
 import { RouterLink } from "@angular/router";
 
 import { ButtonDirective } from "primeng/button";
 import { FieldsetModule } from "primeng/fieldset";
+import { ConfirmationService, MessageService } from "primeng/api";
+
+import { Subscription } from "rxjs";
 
 import { Appointment } from "../../../../../progetto_shared/appointment.type";
+import { BookingService } from "../../../services/booking/booking.service";
 
 @Component({
   selector: 'app-schedule',
@@ -14,14 +18,49 @@ import { Appointment } from "../../../../../progetto_shared/appointment.type";
     ButtonDirective,
     NgForOf,
     FieldsetModule,
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss'
 })
-export class ScheduleComponent {
+export class ScheduleComponent implements OnInit {
 
   appointments: Appointment[] = [];
 
-  cancelAppointment(appointmentID: string) { }
+  constructor(private bookingService: BookingService, private confirmationService: ConfirmationService, private messageService: MessageService) { }
+
+  ngOnInit(): void {
+    this.fetchAppointments();
+  }
+
+  cancelAppointment(appointmentID: string) {
+    this.confirmationService.confirm({
+      message: 'Procedere con la cancellazione dell\'appuntamento?',
+      header: 'Conferma cancellazione',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      accept: () => {
+        const subscription: Subscription = this.bookingService.cancelAppointment(appointmentID).subscribe({
+          next: (response) => {
+            this.fetchAppointments();
+
+            this.messageService.add({ severity: 'success', summary: 'Operazione completata', detail: 'Appuntamento cancellato con successo',  life: 1500 });
+          },
+          error: (error) => console.error(error),
+          complete: () => subscription.unsubscribe()
+        });
+      },
+      reject: () => { }
+    });
+  }
+
+  private fetchAppointments(): void {
+    const subscription: Subscription= this.bookingService.getAppointments().subscribe({
+      next: (response) => this.appointments = response,
+      error: (error) => console.error(error),
+      complete: () => subscription.unsubscribe()
+    });
+  }
 }

@@ -3,8 +3,6 @@ import { HttpClient } from "@angular/common/http";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { EventApi } from "@fullcalendar/core";
-
 import { Appointment } from "../../../../progetto_shared/appointment.type";
 
 @Injectable({
@@ -18,11 +16,15 @@ export class BookingService {
     this.appointment$ = new BehaviorSubject<Appointment | null>(null);
   }
 
+  getAppointments(): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>('http://localhost:7071/api/appointments/all');
+  }
+
   bookAppointment(): Observable<Appointment> {
     return this.httpClient.post<Appointment>('http://localhost:7071/api/appointments/book', this.appointment$.value);
   }
 
-  cancelAppointment(event: EventApi): Observable<any> {
-    return this.httpClient.delete(`XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`);
+  cancelAppointment(appointmentId: string): Observable<any> {
+    return this.httpClient.delete(`http://localhost:7071/api/appointments/cancel/${appointmentId}`);
   }
 }

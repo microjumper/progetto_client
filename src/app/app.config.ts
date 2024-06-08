@@ -1,7 +1,9 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { HTTP_INTERCEPTORS, provideHttpClient } from "@angular/common/http";
+import { DatePipe, registerLocaleData } from "@angular/common";
+import localeIt from '@angular/common/locales/it';
 
 import { IPublicClientApplication, PublicClientApplication, BrowserCacheLocation, InteractionType } from "@azure/msal-browser";
 import {
@@ -13,15 +15,24 @@ import {
   MsalService
 } from "@azure/msal-angular";
 
+import { ConfirmationService, MessageService } from "primeng/api";
+
 import { routes } from './app.routes';
 import { environment } from "../environments/environment";
-import { ConfirmationService, MessageService } from "primeng/api";
+
+registerLocaleData(localeIt);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideRouter(routes),
     provideHttpClient(),
+    {
+      provide: LOCALE_ID, useValue: 'it-IT',
+    },
+    {
+      provide: DatePipe
+    },
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory

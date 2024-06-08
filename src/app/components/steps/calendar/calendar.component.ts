@@ -108,7 +108,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       next: (appointment: Appointment | null) => {
         const calendar = this.calendarComponent?.getApi();
-        calendar?.addEventSource(`http://localhost:7071/api/events/legal-service/${appointment!.legalServiceId}`);
+        calendar?.addEventSource(`http://localhost:7071/api/events/services/${appointment!.legalServiceId}`);
       },
       error: (error) => {
         console.error(error.message);
