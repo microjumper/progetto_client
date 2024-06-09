@@ -101,7 +101,8 @@ export class UploadComponent {
       .pipe(
         filter(account => !!account),
         tap(account =>
-          this.bookingService.appointment$.next({...this.bookingService.appointment$.value, accountId: account?.homeAccountId!})
+          this.bookingService.appointment$.next(
+            {...this.bookingService.appointment$.value, accountId: account?.homeAccountId, accountEmail: account?.username})
         ),
         switchMap(account => this.bookingService.bookAppointment())
       ).subscribe({
