@@ -8,8 +8,8 @@ import { ConfirmationService, MessageService } from "primeng/api";
 
 import { Subscription } from "rxjs";
 
-import { Appointment } from "../../../../../progetto_shared/appointment.type";
-import { BookingService } from "../../../services/booking/booking.service";
+import { Appointment } from "../../../../progetto_shared/appointment.type";
+import { BookingService } from "../../services/booking/booking.service";
 
 @Component({
   selector: 'app-schedule',

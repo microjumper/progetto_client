@@ -54,7 +54,7 @@ export class BookingComponent implements OnInit, OnDestroy {
             this.breadcrumbs = [this.breadcrumbs[0]];
             this.breadcrumbs.push({ label: appointment.legalServiceTitle });
             if(appointment.eventDate) {
-              const localizedDate = this.datePipe.transform(appointment.eventDate, 'fullDate', 'it-IT');
+              const localizedDate = this.datePipe.transform(appointment.eventDate, 'EEEE d MMMM y HH:mm', 'it-IT');
               this.breadcrumbs.push({ label: localizedDate?.toString() });
               this.breadcrumbs.push({ label: '' });
             }
