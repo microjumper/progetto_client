@@ -16,6 +16,11 @@ export class BookingService {
     this.appointment$ = new BehaviorSubject<Appointment | null>(null);
   }
 
+  public getDate(): Observable<{ dateISO: string }>
+  {
+    return this.httpClient.get<{ dateISO: string }>(`http://localhost:7071/api/date`);
+  }
+
   getAppointments(): Observable<Appointment[]> {
     return this.httpClient.get<Appointment[]>('http://localhost:7071/api/appointments');
   }

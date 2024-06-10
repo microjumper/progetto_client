@@ -4,8 +4,15 @@
 
     <ng-template pTemplate="footer">
       <div class="footer">
-        <button #backButton pButton type="button" class="p-button-info p-button-raised" label="Indietro"
-                (click)="onBack(); backButton.blur();" routerLink="../"></button>
+        <div class="calendar-footer">
+          <button #backButton pButton type="button" class="p-button-info p-button-raised" label="Indietro"
+                  (click)="onBack(); backButton.blur();" routerLink="../"></button>
+          <div class="legend">
+            <span class="green-dot pi pi-circle-on">&nbsp;disponibile</span>
+            <span class="red-dot pi pi-circle-on">&nbsp;occupato</span>
+          </div>
+        </div>
+
         <div>
           <p>Nessuna data disponibile? La nostra lista di attesa è disponibile, ti contatteremo appena possibile</p>
           <button #wlButton pButton type="button" class="p-button-text p-button-help p-button-raised" label="Mettiti in lista"

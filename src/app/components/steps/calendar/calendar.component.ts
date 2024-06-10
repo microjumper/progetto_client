@@ -5,16 +5,17 @@ import { ButtonDirective } from "primeng/button";
 import { CardModule } from "primeng/card";
 
 import { FullCalendarComponent, FullCalendarModule } from "@fullcalendar/angular";
-import { CalendarOptions, EventClickArg } from "@fullcalendar/core";
+import { CalendarOptions, EventApi, EventClickArg } from "@fullcalendar/core";
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import itLocale from '@fullcalendar/core/locales/it';
 
-import { filter, Subscription } from "rxjs";
+import { filter, firstValueFrom, Subscription } from "rxjs";
 
 import { BookingService } from "../../../services/booking/booking.service";
 import { Appointment } from "../../../../../progetto_shared/appointment.type";
+import { MessageService } from "primeng/api";
 
 @Component({
   selector: 'app-calendar',
@@ -36,7 +37,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscription: Subscription | undefined;
 
-  constructor(private bookingService: BookingService, private router: Router) { }
+  constructor(private bookingService: BookingService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.initCalendar();
@@ -91,13 +92,27 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  private handleClick(clickInfo: EventClickArg) {
+  private async handleClick(clickInfo: EventClickArg) {
     clickInfo.jsEvent.preventDefault();
 
     const event = clickInfo.event;
 
+    if(await this.isDatePassed(event)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Errore di selezione',
+        detail: 'Impossibile selezionare una data passata', life: 3000
+      });
+      return;
+    }
+
     if(event.extendedProps["appointment"])
     {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Errore di selezione',
+        detail: 'Impossibile selezionare una data già occupata', life: 3000
+      });
       return;
     }
 
@@ -133,5 +148,14 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     const calendar = this.calendarComponent?.getApi();
     calendar?.removeAllEventSources();
     calendar?.removeAllEvents();
+  }
+
+  private async isDatePassed(event: EventApi): Promise<boolean> {
+    const eventDate = event.start!;
+
+    const response = await firstValueFrom(this.bookingService.getDate());
+    const currentDate = new Date(response.dateISO);
+
+    return eventDate < currentDate
   }
 }

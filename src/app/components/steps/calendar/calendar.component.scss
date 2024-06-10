@@ -1,0 +1,29 @@
+.calendar-footer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.legend {
+  width: 200px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    margin: auto;
+    display: block;
+    font-size: 16px;
+  }
+}
+
+.red-dot {
+  color: #F44336;
+}
+
+.green-dot {
+  color: #4CAF50;
+}
