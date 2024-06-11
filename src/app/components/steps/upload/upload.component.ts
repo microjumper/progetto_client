@@ -36,7 +36,7 @@ export class UploadComponent {
 
   private filesToUpload: File[] = [];
 
-  constructor(private bookingService: BookingService, private authService: AuthService,private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) { }
+  constructor(private bookingService: BookingService, private authService: AuthService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) { }
 
   onSelect(event: FileSelectEvent): void {
     this.filesToUpload = event.files

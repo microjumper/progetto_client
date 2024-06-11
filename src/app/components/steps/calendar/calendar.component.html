@@ -16,7 +16,7 @@
         <div>
           <p>Nessuna data disponibile? La nostra lista di attesa è disponibile, ti contatteremo appena possibile</p>
           <button #wlButton pButton type="button" class="p-button-text p-button-help p-button-raised" label="Mettiti in lista"
-                  (click)="wlButton.blur();"></button>
+                  (click)="subscribeToWaitingList(); wlButton.blur();"></button>
         </div>
       </div>
     </ng-template>
