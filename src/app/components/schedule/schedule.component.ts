@@ -6,10 +6,11 @@ import { ButtonDirective } from "primeng/button";
 import { FieldsetModule } from "primeng/fieldset";
 import { ConfirmationService, MessageService } from "primeng/api";
 
-import { Subscription } from "rxjs";
+import { Subscription, switchMap } from "rxjs";
 
 import { Appointment } from "../../../../progetto_shared/appointment.type";
 import { BookingService } from "../../services/booking/booking.service";
+import { AuthService } from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-schedule',
@@ -28,7 +29,7 @@ export class ScheduleComponent implements OnInit {
 
   appointments: Appointment[] = [];
 
-  constructor(private bookingService: BookingService, private confirmationService: ConfirmationService, private messageService: MessageService) { }
+  constructor(private bookingService: BookingService, private confirmationService: ConfirmationService, private messageService: MessageService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.fetchAppointments();
@@ -57,7 +58,9 @@ export class ScheduleComponent implements OnInit {
   }
 
   private fetchAppointments(): void {
-    const subscription: Subscription= this.bookingService.getAppointments().subscribe({
+    const subscription: Subscription = this.authService.getActiveAccount().pipe(
+      switchMap(account => this.bookingService.getAppointments(account?.homeAccountId!))
+    ).subscribe({
       next: (response) => this.appointments = response,
       error: (error) => console.error(error),
       complete: () => subscription.unsubscribe()

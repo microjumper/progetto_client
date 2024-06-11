@@ -22,8 +22,8 @@ export class BookingService {
     return this.httpClient.get<{ dateISO: string }>(`http://localhost:7071/api/date`);
   }
 
-  getAppointments(): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>('http://localhost:7071/api/appointments');
+  getAppointments(userId: string): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(`http://localhost:7071/api/users/${userId}/appointments`);
   }
 
   bookAppointment(): Observable<Appointment> {
