@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
-import { ButtonDirective } from "primeng/button";
 
+import { ButtonDirective } from "primeng/button";
 import { CardModule } from "primeng/card";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { MessageService } from "primeng/api";
 
 import { FullCalendarComponent, FullCalendarModule } from "@fullcalendar/angular";
 import { CalendarOptions, EventApi, EventClickArg } from "@fullcalendar/core";
@@ -16,8 +16,6 @@ import { filter, firstValueFrom, Subscription } from "rxjs";
 
 import { BookingService } from "../../../services/booking/booking.service";
 import { Appointment } from "../../../../../progetto_shared/appointment.type";
-import { AuthService } from "../../../services/auth/auth.service";
-import { WaitingListEntity } from "../../../../../progetto_shared/waitingListEntity.type";
 
 @Component({
   selector: 'app-calendar',
@@ -39,12 +37,12 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscription: Subscription | undefined;
 
-  constructor(private bookingService: BookingService, private router: Router, private messageService: MessageService, private authService: AuthService, private confirmationService: ConfirmationService) { }
+  constructor(private bookingService: BookingService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.initCalendar();
 
-    this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, eventDate: undefined });
+    this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, eventId: undefined, eventDate: undefined });
   }
 
   ngAfterViewInit(): void {
@@ -144,42 +142,8 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.bookingService.appointment$.next(null);
   }
 
-  async subscribeToWaitingList(): Promise<void> {
-    this.confirmationService.confirm({
-      message: 'Riceverai una email se un appuntamento sarà disponibile a causa di cancellazioni',
-      header: 'Vuoi iscriverti alla lista d\'attesa?',
-      icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      accept: async () => {
-        const accountInfo = await firstValueFrom(this.authService.getActiveAccount());
-        const appointment = await firstValueFrom(this.bookingService.appointment$);
-        const entity: WaitingListEntity = {
-          legalServiceId: appointment?.legalServiceId!,
-          user: {
-            id: accountInfo?.homeAccountId!,
-            email: accountInfo?.username!
-          }
-        }
-        const subscription: Subscription = this.bookingService.subscribeToWaitingList(entity).subscribe({
-          next: response => { },
-          error: error => console.error(error),
-          complete: () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Iscrizione effettuata',
-              detail: 'Riceverai una email se un appuntamento sarà disponibile a causa di cancellazioni',
-              life: 3000
-            });
-
-            this.router.navigate(['']);
-
-            subscription.unsubscribe();
-          }
-        });
-      },
-      reject: () => { }
-    });
+  subscribeToWaitingList(): void {
+    this.router.navigate(['booking', 'upload'])
   }
 
   ngOnDestroy(): void {

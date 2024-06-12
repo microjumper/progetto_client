@@ -10,10 +10,9 @@ import {
   FileUploadModule
 } from "primeng/fileupload";
 import { CardModule } from "primeng/card";
+import { Confirmation, ConfirmationService, MessageService } from "primeng/api";
 
-import { ConfirmationService, MessageService } from "primeng/api";
-
-import { filter, Subscription, switchMap, tap } from "rxjs";
+import { filter, firstValueFrom, Subscription, switchMap, tap } from "rxjs";
 
 import { BookingService } from "../../../services/booking/booking.service";
 import { AuthService } from "../../../services/auth/auth.service";
@@ -43,16 +42,18 @@ export class UploadComponent {
   }
 
   onBeforeUpload(event: FileBeforeUploadEvent) {
-    const subscription: Subscription = this.authService.getActiveAccount().pipe(
-      filter(account => !!account)).subscribe({
-      next: (account) => {
-        const accountId =  account?.homeAccountId!;
-        const accountEmail = account?.username!;
-        event.formData.append("accountId", accountId);
-        event.formData.append("accountEmail", accountEmail);
-      },
-      error: (error) => console.error(error),
-      complete: () => subscription.unsubscribe()
+    const subscription: Subscription = this.authService.getActiveAccount()
+      .pipe(
+        filter(account => !!account)
+      ).subscribe({
+        next: (account) => {
+          const accountId =  account?.homeAccountId!;
+          const accountEmail = account?.username!;
+          event.formData.append("accountId", accountId);
+          event.formData.append("accountEmail", accountEmail);
+        },
+        error: (error) => console.error(error),
+        complete: () => subscription.unsubscribe()
     });
   }
 
@@ -62,60 +63,105 @@ export class UploadComponent {
 
     this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, fileMetadata });
 
-    this.book();
-
-    this.filesToUpload = [];
-  }
-
-  onError(event: any) {
-    console.error(event.error.message)
+    this.book()
+      .then(r => this.filesToUpload = [])
+      .catch(e => console.error(e));
   }
 
   onBook(uploader: FileUpload): void {
-    if(this.filesToUpload.length > 0) {
-      this.confirmationService.confirm({
-        message: 'Procedere con la prenotazione?',
-        header: 'Conferma prenotazione',
-        icon: 'pi pi-exclamation-triangle',
-        acceptIcon: "none",
-        rejectIcon: "none",
-        accept: () => uploader.upload(),
-        reject: () => { }
-      });
+    if(!this.bookingService.appointment$.value?.eventId)
+    {
+      this.confirmationService.confirm(
+        this.setupConfirmation(
+          'Riceverai un\'email se un appuntamento sarà disponibile',
+          'Vuoi metterti in lista d\'attesa?',
+          this.addToWaitingList.bind(this)
+        )
+      );
+      return;
+    }
+
+    if (this.filesToUpload.length > 0) {
+      this.confirmationService.confirm(
+        this.setupConfirmation(
+          'Procedere con la prenotazione?',
+          'Conferma prenotazione',
+          uploader.upload // first upload then book
+        )
+      );
     }
     else {
-      this.confirmationService.confirm({
-        message: 'Procedere senza allegati?',
-        header: 'Stai prenotando senza allegare documenti',
-        icon: 'pi pi-exclamation-triangle',
-        acceptIcon: "none",
-        rejectIcon: "none",
-        accept: () => this.book(),
-        reject: () => { }
-      });
+      this.confirmationService.confirm(
+        this.setupConfirmation(
+          'Procedere senza allegati?',
+          'Stai prenotando senza allegare documenti',
+          this.book.bind(this)
+        )
+      );
     }
   }
 
-  private book(): void {
-    const subscription: Subscription = this.authService.getActiveAccount()
-      .pipe(
-        filter(account => !!account),
-        tap(account =>
-          this.bookingService.appointment$.next(
-            {...this.bookingService.appointment$.value, accountId: account?.homeAccountId, accountEmail: account?.username})
-        ),
-        switchMap(account => this.bookingService.bookAppointment())
-      ).subscribe({
-        next: (appointment) => {
-          this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Prenotazione effettuata',  life: 1500 });
+  private setupConfirmation(message: string, header: string, acceptCallback: Function): Confirmation {
+    return {
+      message,
+      header,
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      accept: () => acceptCallback(),
+      reject: (): void => {}
+    };
+}
 
-          // clean up
-          this.bookingService.appointment$.next(null);
-          subscription.unsubscribe();
+  private async book(): Promise<void> {
+    await this.setUser();
 
-          this.router.navigate(["/", "schedule"]);
-        },
-        error: (error) => console.error(error)
-      });
+    const subscription = this.bookingService.bookAppointment().subscribe({
+      next: (appointment) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Operazione eseguita',
+          detail: 'Prenotazione effettuata correttamente',  life: 1500 });
+
+        // clean up
+        this.bookingService.appointment$.next(null);
+        subscription.unsubscribe();
+
+        this.router.navigate(["/", "schedule"]);
+      },
+      error: (error) => console.error(error)
+    });
+  }
+
+  private async addToWaitingList(): Promise<void> {
+    await this.setUser();
+
+    const subscription = this.bookingService.addToWaitingList().subscribe({
+      next: (appointment) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Operazione eseguita',
+          detail: 'Aggiunto correttamente in lista',  life: 1500 });
+
+        // clean up
+        this.bookingService.appointment$.next(null);
+        subscription.unsubscribe();
+
+        this.router.navigate(["/", "schedule"]);
+      },
+      error: (error) => console.error(error)
+    });
+  }
+
+  private async setUser(): Promise<void> {
+    const accountInfo = await firstValueFrom(this.authService.getActiveAccount());
+
+    this.bookingService.appointment$.next({
+      ...this.bookingService.appointment$.value,
+      user: {
+        id: accountInfo?.homeAccountId!,
+        email: accountInfo?.username!
+      }
+    });
   }
 }

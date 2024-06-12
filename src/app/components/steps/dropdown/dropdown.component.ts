@@ -4,10 +4,11 @@ import { Router } from "@angular/router";
 import { DropdownModule } from "primeng/dropdown";
 import { CardModule } from "primeng/card";
 
+import { Subscription } from "rxjs";
+
 import { LegalService } from "../../../../../progetto_shared/legalService.type";
 import { DataService } from "../../../services/data/data.service";
 import { BookingService } from "../../../services/booking/booking.service";
-
 
 @Component({
   selector: 'app-dropdown',
@@ -33,19 +34,17 @@ export class DropdownComponent implements OnInit {
 
   private getLegalServices(): void
   {
-    this.dataService.getLegalServices().subscribe({
-      next: (data: LegalService[]) => {
-        this.legalServicesDropdown = data;
-      },
-      error: (err) => {
-        console.error(err.message);
-      }
+    const subscription: Subscription = this.dataService.getLegalServices().subscribe({
+      next: (data: LegalService[]) => this.legalServicesDropdown = data,
+      error: (err) => console.error(err.message),
+      complete: () => subscription.unsubscribe()
     });
   }
 
   onLegalServiceSelected(event: { originalEvent: Event, value: any }): void
   {
     this.bookingService.appointment$.next({ legalServiceId: event.value.id, legalServiceTitle: event.value.title });
+
     this.router.navigate(['booking', 'date']);
   }
 }

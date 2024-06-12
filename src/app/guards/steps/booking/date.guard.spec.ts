@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { uploadGuard } from './upload.guard';
+import { bookingGuard } from './bookingGuard';
 
-describe('uploadGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => uploadGuard(...guardParameters));
+describe('dateGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+      TestBed.runInInjectionContext(() => bookingGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

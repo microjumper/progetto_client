@@ -34,7 +34,7 @@ export class BookingService {
     return this.httpClient.delete(`http://localhost:7071/api/appointments/cancel/${appointmentId}`);
   }
 
-  subscribeToWaitingList(entity: WaitingListEntity): Observable<WaitingListEntity> {
-    return this.httpClient.post<WaitingListEntity>('http://localhost:7071/api/waitinglist/subscribe', entity);
+  addToWaitingList(): Observable<WaitingListEntity> {
+    return this.httpClient.post<WaitingListEntity>('http://localhost:7071/api/waitinglist/add', this.appointment$.value);
   }
 }

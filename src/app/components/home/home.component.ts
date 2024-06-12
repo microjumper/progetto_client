@@ -17,15 +17,12 @@ import { CarouselModule } from "primeng/carousel";
 })
 export class HomeComponent {
 
-  images: any[];
+  images= [
+    { source: 'assets/carousel/photo_1.jpg', alt: '' },
+    { source: 'assets/carousel/photo_2.jpg', alt: '' },
+    { source: 'assets/carousel/photo_3.jpg', alt: '' },
+    { source: 'assets/carousel/photo_4.jpg', alt: '' }
+  ];
 
-  constructor() {
-
-    this.images = [
-      { source: 'assets/carousel/photo_1.jpg', alt: '' },
-      { source: 'assets/carousel/photo_2.jpg', alt: '' },
-      { source: 'assets/carousel/photo_3.jpg', alt: '' },
-      { source: 'assets/carousel/photo_4.jpg', alt: '' }
-      ];
-  }
+  constructor() { }
 }

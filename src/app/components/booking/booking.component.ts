@@ -47,32 +47,36 @@ export class BookingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.bookingService.appointment$.subscribe({
-        next: appointment => {
-          if(appointment) {
-            this.breadcrumbs = [this.breadcrumbs[0]];
-            this.breadcrumbs.push({ label: appointment.legalServiceTitle });
-            if(appointment.eventDate) {
-              const localizedDate = this.datePipe.transform(appointment.eventDate, 'EEEE d MMMM y HH:mm', 'it-IT');
-              this.breadcrumbs.push({ label: localizedDate?.toString() });
-              this.breadcrumbs.push({ label: '' });
-            }
-            else {
-              this.breadcrumbs.push({ label: '' });
-            }
+    this.setBreadcrumbs();
+  }
+
+  private setBreadcrumbs(): void {
+    const appointmentSubscription = this.bookingService.appointment$.subscribe({
+      next: appointment => {
+        if(appointment) {
+          this.breadcrumbs = [this.breadcrumbs[0]];
+          this.breadcrumbs.push({ label: appointment.legalServiceTitle });
+          if(appointment.eventDate) {
+            const localizedDate = this.datePipe.transform(appointment.eventDate, 'EEEE d MMMM y HH:mm', 'it-IT');
+            this.breadcrumbs.push({ label: localizedDate?.toString() });
+            this.breadcrumbs.push({ label: '' });
           }
           else {
-            this.breadcrumbs = [
-              { icon: 'pi pi-calendar' },
-              { label: '' }
-            ];
+            this.breadcrumbs.push({ label: '' });
           }
-
-          this.changeDetector.detectChanges();
         }
-      })
-    );
+        else {
+          this.breadcrumbs = [
+            { icon: 'pi pi-calendar' },
+            { label: '' }
+          ];
+        }
+        this.changeDetector.detectChanges();
+      },
+      error: error => console.error(error.message)
+    });
+
+    this.subscriptions.push(appointmentSubscription);
   }
 
   ngOnDestroy(): void {

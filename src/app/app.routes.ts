@@ -9,16 +9,15 @@ import { CalendarComponent } from "./components/steps/calendar/calendar.componen
 import { UploadComponent } from "./components/steps/upload/upload.component";
 import { ScheduleComponent } from "./components/schedule/schedule.component";
 
-import { dateGuard } from "./guards/steps/date/date.guard";
-import { uploadGuard } from "./guards/steps/upload/upload.guard";
+import { bookingGuard } from "./guards/steps/booking/bookingGuard";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'booking', component: BookingComponent, canActivate: [MsalGuard],
     children: [
       { path: 'service', component: DropdownComponent },
-      { path: 'date', component: CalendarComponent, canActivate: [dateGuard]},
-      { path: 'upload', component: UploadComponent, canActivate: [uploadGuard]},
+      { path: 'date', component: CalendarComponent, canActivate: [bookingGuard]},
+      { path: 'upload', component: UploadComponent, canActivate: [bookingGuard]},
       { path: '**', redirectTo: 'service' }
     ]
   },

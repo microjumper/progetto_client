@@ -58,12 +58,13 @@ export class ScheduleComponent implements OnInit {
   }
 
   private fetchAppointments(): void {
-    const subscription: Subscription = this.authService.getActiveAccount().pipe(
-      switchMap(account => this.bookingService.getAppointments(account?.homeAccountId!))
-    ).subscribe({
-      next: (response) => this.appointments = response,
-      error: (error) => console.error(error),
-      complete: () => subscription.unsubscribe()
-    });
+    const subscription: Subscription = this.authService.getActiveAccount()
+      .pipe(
+        switchMap(account => this.bookingService.getAppointments(account?.homeAccountId!))
+      ).subscribe({
+        next: (response) => this.appointments = response,
+        error: (error) => console.error(error),
+        complete: () => subscription.unsubscribe()
+      });
   }
 }

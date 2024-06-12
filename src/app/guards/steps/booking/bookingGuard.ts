@@ -3,13 +3,13 @@ import { inject } from "@angular/core";
 
 import { BookingService } from "../../../services/booking/booking.service";
 
-export const uploadGuard: CanActivateFn = (route, state) => {
+export const bookingGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const bookingService = inject(BookingService);
 
-  if (bookingService.appointment$.value?.eventDate) {
+  if (bookingService.appointment$.value?.legalServiceId) {
     return true;
   } else {
-    return router.createUrlTree(['/booking/date']);
+    return router.createUrlTree(['/booking/service']);
   }
 };
