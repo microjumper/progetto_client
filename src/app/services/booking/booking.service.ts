@@ -41,4 +41,8 @@ export class BookingService {
   getUserWaitingList(userId: string): Observable<WaitingListEntity[]> {
     return this.httpClient.get<WaitingListEntity[]>(`http://localhost:7071/api/users/${userId}/waitinglist`);
   }
+
+  deleteUserFromWaitingList(entityId: string): Observable<WaitingListEntity> {
+    return this.httpClient.delete<WaitingListEntity>(`http://localhost:7071/api/waitinglist/remove/${entityId}`)
+  }
 }

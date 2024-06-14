@@ -61,12 +61,31 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  confirmAppointment(reservationId: string): void {
+  confirmAppointment(entityId: string): void {
 
   }
 
-  cancelReservation(reservationId: string): void {
+  cancelReservation(entityId: string): void {
+    console.log(entityId)
+    this.confirmationService.confirm({
+      message: 'Procedere con la cancellazione?',
+      header: 'Conferma cancellazione',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      accept: () => {
+        const subscription: Subscription = this.bookingService.deleteUserFromWaitingList(entityId).subscribe({
+          next: (response) => {
+            this.fetchWaitingList();
 
+            this.messageService.add({ severity: 'success', summary: 'Operazione completata', detail: 'Rimosso dalla lista d\'attesa',  life: 1500 });
+          },
+          error: (error) => console.error(error),
+          complete: () => subscription.unsubscribe()
+        });
+      },
+      reject: () => { }
+    });
   }
 
   private fetchAppointments(): void {

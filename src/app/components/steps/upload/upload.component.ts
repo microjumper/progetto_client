@@ -4,15 +4,14 @@ import { HttpResponse } from "@angular/common/http";
 
 import {
   FileBeforeUploadEvent,
-  FileSelectEvent,
   FileUpload,
   FileUploadEvent,
   FileUploadModule
 } from "primeng/fileupload";
 import { CardModule } from "primeng/card";
-import { Confirmation, ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 
-import { filter, firstValueFrom, Subscription, switchMap, tap } from "rxjs";
+import { filter, firstValueFrom, Subscription } from "rxjs";
 
 import { BookingService } from "../../../services/booking/booking.service";
 import { AuthService } from "../../../services/auth/auth.service";
@@ -33,13 +32,7 @@ export class UploadComponent {
 
   readonly uploadUrl = "http://localhost:7071/api/documents/upload";
 
-  private filesToUpload: File[] = [];
-
   constructor(private bookingService: BookingService, private authService: AuthService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) { }
-
-  onSelect(event: FileSelectEvent): void {
-    this.filesToUpload = event.files
-  }
 
   onBeforeUpload(event: FileBeforeUploadEvent) {
     const subscription: Subscription = this.authService.getActiveAccount()
@@ -63,55 +56,48 @@ export class UploadComponent {
 
     this.bookingService.appointment$.next({ ...this.bookingService.appointment$.value, fileMetadata });
 
-    this.book()
-      .then(r => this.filesToUpload = [])
-      .catch(e => console.error(e));
+    let promise: Promise<void>;
+    if(this.bookingService.appointment$.value?.eventId) {
+      promise = this.book();
+    }
+    else {
+      promise = this.addToWaitingList();
+    }
+    promise.then().catch(e => console.error(e));
   }
 
   onBook(uploader: FileUpload): void {
-    if(!this.bookingService.appointment$.value?.eventId)
-    {
-      this.confirmationService.confirm(
-        this.setupConfirmation(
-          'Riceverai un\'email se un appuntamento sarà disponibile',
-          'Vuoi metterti in lista d\'attesa?',
-          this.addToWaitingList.bind(this)
-        )
-      );
-      return;
-    }
-
-    if (this.filesToUpload.length > 0) {
-      this.confirmationService.confirm(
-        this.setupConfirmation(
-          'Procedere con la prenotazione?',
-          'Conferma prenotazione',
-          uploader.upload.bind(uploader) // first upload then book
-        )
-      );
+    if (uploader.files.length > 0) {
+      this.confirmationService.confirm({
+        message: this.bookingService.appointment$.value?.eventId ? 'Procedere con la prenotazione?' : 'Vuoi metterti in lista d\'attesa?',
+        header: 'Conferma operazione',
+        icon: 'pi pi-exclamation-triangle',
+        acceptIcon: "none",
+        rejectIcon: "none",
+        accept: () => uploader.upload(), // first upload then book or add user to waiting list
+        reject: (): void => {}
+      });
     }
     else {
-      this.confirmationService.confirm(
-        this.setupConfirmation(
-          'Procedere senza allegati?',
-          'Stai prenotando senza allegare documenti',
-          this.book.bind(this)
-        )
+      this.confirmationService.confirm({
+          message: 'Procedere senza allegati?',
+          header: this.bookingService.appointment$.value?.eventId ? 'Stai prenotando senza allegare documenti' : 'Sai messo in lista d\'attesa senza allegati',
+          icon: 'pi pi-exclamation-triangle',
+          acceptIcon: "none",
+          rejectIcon: "none",
+          accept: () => {
+            if(this.bookingService.appointment$.value?.eventId) {
+              this.book().then().catch(e => console.error(e));
+            }
+            else {
+              this.addToWaitingList().then().catch(e => console.error(e))
+            }
+          },
+          reject: (): void => {}
+        }
       );
     }
   }
-
-  private setupConfirmation(message: string, header: string, acceptCallback: Function): Confirmation {
-    return {
-      message,
-      header,
-      icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      accept: () => acceptCallback(),
-      reject: (): void => {}
-    };
-}
 
   private async book(): Promise<void> {
     await this.setUser();
