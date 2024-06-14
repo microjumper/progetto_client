@@ -22,8 +22,8 @@
       <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback">
         <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
           <div class="flex gap-2">
-            <button #chooseButton pButton type="button" class="p-button-primary p-button-raised" label="Allega" icon="pi pi-plus"
-                    (click)="chooseCallback(); chooseButton.blur();"></button>
+            <button #chooseButton [disabled]="files.length >= 3" (click)="chooseCallback(); chooseButton.blur();"
+                    pButton type="button" class="p-button-primary p-button-raised" label="Allega" icon="pi pi-plus"></button>
             <p-button icon="pi pi-times" label="Annulla" severity="danger" (onClick)="clearCallback()"
                       [disabled]="!files || files.length === 0" [raised]="true"/>
           </div>
