@@ -86,7 +86,7 @@ export class UploadComponent {
         this.setupConfirmation(
           'Procedere con la prenotazione?',
           'Conferma prenotazione',
-          uploader.upload // first upload then book
+          uploader.upload.bind(uploader) // first upload then book
         )
       );
     }
