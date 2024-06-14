@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { DatePipe, NgForOf } from "@angular/common";
 import { RouterLink } from "@angular/router";
 
@@ -11,6 +11,7 @@ import { Subscription, switchMap } from "rxjs";
 import { Appointment } from "../../../../progetto_shared/appointment.type";
 import { BookingService } from "../../services/booking/booking.service";
 import { AuthService } from "../../services/auth/auth.service";
+import { WaitingListEntity } from "../../../../progetto_shared/waitingListEntity.type";
 
 @Component({
   selector: 'app-schedule',
@@ -28,11 +29,14 @@ import { AuthService } from "../../services/auth/auth.service";
 export class ScheduleComponent implements OnInit {
 
   appointments: Appointment[] = [];
+  waitingList: WaitingListEntity[] = [];
 
   constructor(private bookingService: BookingService, private confirmationService: ConfirmationService, private messageService: MessageService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.fetchAppointments();
+
+    this.fetchWaitingList();
   }
 
   cancelAppointment(appointmentID: string) {
@@ -57,12 +61,31 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
+  confirmAppointment(reservationId: string): void {
+
+  }
+
+  cancelReservation(reservationId: string): void {
+
+  }
+
   private fetchAppointments(): void {
     const subscription: Subscription = this.authService.getActiveAccount()
       .pipe(
         switchMap(account => this.bookingService.getAppointments(account?.homeAccountId!))
       ).subscribe({
         next: (response) => this.appointments = response,
+        error: (error) => console.error(error),
+        complete: () => subscription.unsubscribe()
+      });
+  }
+
+  private fetchWaitingList(): void {
+    const subscription: Subscription = this.authService.getActiveAccount()
+      .pipe(
+        switchMap(account => this.bookingService.getUserWaitingList(account?.homeAccountId!))
+      ).subscribe({
+        next: (response) => this.waitingList = response,
         error: (error) => console.error(error),
         complete: () => subscription.unsubscribe()
       });

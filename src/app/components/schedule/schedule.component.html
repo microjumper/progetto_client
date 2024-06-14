@@ -1,14 +1,58 @@
-<div class="schedule">
-  <div class="container">
-    <p-fieldset legend="I miei appuntamenti">
-      <div class="appointment" *ngFor="let appointment of appointments">
-        <h2>{{ appointment.legalServiceTitle }}</h2>
-        <h6>{{appointment.eventDate | date: 'EEEE d MMMM y HH:mm'}}</h6>
-        <span *ngFor="let file of appointment.fileMetadata">{{ file.originalFileName }}</span>
-        <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelAppointment(appointment.id!); cancelButton.blur();"
-                class="cancelButton p-button-danger p-button-raised p-button-rounded">
-        </button>
-      </div>
-    </p-fieldset>
-  </div>
+<div class="container">
+  <p-fieldset legend="I miei appuntamenti">
+    <table class="styled-table">
+      <thead>
+      <tr>
+        <th>Servizio legale</th>
+        <th>Data</th>
+        <th>Allegati</th>
+        <th>Azioni</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let appointment of appointments">
+        <td>{{ appointment.legalServiceTitle }}</td>
+        <td>{{appointment.eventDate | date: 'EEEE d MMMM y HH:mm'}}</td>
+        <td class="file-column">
+          <p *ngFor="let file of appointment.fileMetadata">{{ file.originalFileName }}</p>
+        </td>
+        <td>
+          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelAppointment(appointment.id!); cancelButton.blur();"
+                  class="p-button-danger p-button-rounded p-button-text p-button-raised">
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </p-fieldset>
+
+  <p-fieldset legend="In lista d'attesa">
+    <table class="styled-table waiting-list">
+      <thead>
+      <tr>
+        <th>Servizio legale</th>
+        <th>Data</th>
+        <th>Allegati</th>
+        <th>Azioni</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let entity of waitingList">
+        <td>{{ entity.appointment.legalServiceTitle }}</td>
+        <td>{{ entity.appointment.eventDate | date: 'EEEE d MMMM y HH:mm' }}</td>
+        <td class="file-column">
+          <p *ngFor="let file of entity.appointment.fileMetadata">{{ file.originalFileName }}</p>
+        </td>
+        <td>
+          <button disabled #confirmButton pButton type="button" icon="pi pi-check" (click)="confirmAppointment(entity.id!); confirmButton.blur();"
+                  class="p-button-success p-button-rounded p-button-text p-button-raised" style="margin-right: 8px">
+          </button>
+          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelReservation(entity.id!); cancelButton.blur();"
+                  class="p-button-danger p-button-rounded p-button-text p-button-raised" style="margin-left: 8px">
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </p-fieldset>
 </div>

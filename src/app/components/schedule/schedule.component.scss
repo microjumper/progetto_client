@@ -1,59 +1,70 @@
-.schedule {
+.container {
   width: 100%;
   height: 100%;
 
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.container {
-  width: 640px;
-}
-
-.appointment {
-  padding: 16px;
-
-  width: 600px;
-
-  position: relative;
-
-  display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: stretch;
+  align-items: stretch;
 
-  background-color: #fff;
-  border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  margin-bottom: 16px;
+  gap: 32px;
+}
 
-  h2 {
-    margin: 0 0 4px 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 18px;
+  text-align: left;
+}
 
-  h6 {
-    margin: 0 0 16px 0;
-    font-size: 1rem;
-    font-weight: 400;
-    color: rgba(0, 0, 0, 0.6);
-  }
+.styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
 
-  span {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 16px;
+.styled-table th,
+.styled-table td {
+  padding: 12px 16px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
+
+.file-column {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  p {
+    margin: 8px 0;
   }
 }
 
-.cancelButton {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-
-  z-index: 10;
+.styled-table.waiting-list thead tr {
+  background-color: #5c9ead;
 }
 
+.styled-table.waiting-list tbody tr:last-of-type {
+  border-bottom: 2px solid #5c9ead;
+}
+
+.styled-table.waiting-list tbody tr.active-row {
+  color: #5c9ead;
+}

@@ -37,4 +37,8 @@ export class BookingService {
   addToWaitingList(): Observable<WaitingListEntity> {
     return this.httpClient.post<WaitingListEntity>('http://localhost:7071/api/waitinglist/add', this.appointment$.value);
   }
+
+  getUserWaitingList(userId: string): Observable<WaitingListEntity[]> {
+    return this.httpClient.get<WaitingListEntity[]>(`http://localhost:7071/api/users/${userId}/waitinglist`);
+  }
 }
