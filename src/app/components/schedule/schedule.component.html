@@ -17,7 +17,7 @@
           <p *ngFor="let file of appointment.fileMetadata">{{ file.originalFileName }}</p>
         </td>
         <td>
-          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelAppointment(appointment.id!); cancelButton.blur();"
+          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelAppointment(appointment.id!, cancelButton); cancelButton.blur();"
                   class="p-button-danger p-button-rounded p-button-text p-button-raised">
           </button>
         </td>
@@ -44,10 +44,11 @@
           <p *ngFor="let file of entity.appointment.fileMetadata">{{ file.originalFileName }}</p>
         </td>
         <td>
-          <button disabled #confirmButton pButton type="button" icon="pi pi-check" (click)="confirmAppointment(entity.id!); confirmButton.blur();"
+          <button [disabled]="!entity.appointment.eventId" #confirmButton pButton type="button" icon="pi pi-check"
+                  (click)="confirmAppointment(entity.appointment, confirmButton, cancelButton); confirmButton.blur();"
                   class="p-button-success p-button-rounded p-button-text p-button-raised" style="margin-right: 8px">
           </button>
-          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelReservation(entity.id!); cancelButton.blur();"
+          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelReservation(entity.id!, confirmButton, cancelButton); cancelButton.blur();"
                   class="p-button-danger p-button-rounded p-button-text p-button-raised" style="margin-left: 8px">
           </button>
         </td>

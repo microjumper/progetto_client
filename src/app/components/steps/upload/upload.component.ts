@@ -81,7 +81,7 @@ export class UploadComponent {
     else {
       this.confirmationService.confirm({
           message: 'Procedere senza allegati?',
-          header: this.bookingService.appointment$.value?.eventId ? 'Stai prenotando senza allegare documenti' : 'Sai messo in lista d\'attesa senza allegati',
+          header: this.bookingService.appointment$.value?.eventId ? 'Stai prenotando senza allegare documenti' : 'Sarai messo in lista d\'attesa senza allegati',
           icon: 'pi pi-exclamation-triangle',
           acceptIcon: "none",
           rejectIcon: "none",
