@@ -97,14 +97,14 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const event = clickInfo.event;
 
-    // if(await this.isDatePassed(event)) {
-    //   this.messageService.add({
-    //     severity: 'error',
-    //     summary: 'Errore di selezione',
-    //     detail: 'Impossibile selezionare una data passata', life: 3000
-    //   });
-    //   return;
-    // }
+    if(await this.isDatePassed(event)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Errore di selezione',
+        detail: 'Impossibile selezionare una data passata', life: 3000
+      });
+      return;
+    }
 
     if(event.extendedProps["appointment"])
     {
