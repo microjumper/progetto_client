@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: '20'  
+          node-version: '20'
       - name: 'Create env file'
         run: |
           touch .env
@@ -45,7 +45,7 @@ jobs:
           action: "upload"
           app_location: "/"
           api_location: ""
-          output_location: "dist/progetto_client/browser"
+          output_location: "dist/progetto_client"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
