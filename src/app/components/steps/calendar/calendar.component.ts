@@ -35,7 +35,19 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   calendarOptions: CalendarOptions | undefined;
 
-  constructor(private bookingService: BookingService, private router: Router, private messageService: MessageService) { }
+  private readonly baseUrl: string;
+  private readonly getBookableByServiceCode: string;
+
+  constructor(private bookingService: BookingService, private router: Router, private messageService: MessageService) {
+    if (window.location.hostname === "localhost") {
+      this.baseUrl = 'http://localhost:7071/api';
+      this.getBookableByServiceCode = '';
+    }
+    else {
+      this.baseUrl = 'https://appointment-scheduler.azurewebsites.net/api';
+      this.getBookableByServiceCode = `?code=${process.env['GET_BOOKABLE_BY_SERVICES_CODE']}`;
+    }
+  }
 
   ngOnInit(): void {
     this.initCalendar();
@@ -119,7 +131,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       next: (appointment: Appointment | null) => {
         const calendar = this.calendarComponent?.getApi();
-        calendar?.addEventSource(`http://localhost:7071/api/services/events/bookable/${appointment!.legalServiceId}`);
+        calendar?.addEventSource(`${this.baseUrl}/services/events/bookable/${appointment!.legalServiceId}${this.getBookableByServiceCode}`);
       },
       error: (error) => {
         console.error(error.message);
