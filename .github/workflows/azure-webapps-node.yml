@@ -29,7 +29,7 @@ jobs:
           echo CLIENT_ID="${{ secrets.CLIENT_ID }}" >> .env
           echo GET_CURRENT_DATE_CODE="${{ secrets.GET_CURRENT_DATE_CODE }}" >> .env
           echo GET_APPOINTMENTS_CODE="${{ secrets.GET_APPOINTMENTS_CODE }}" >> .env
-          echo BOOKING_CODE="${{ secrets.BOOKING_CODE }}" >> .env
+          echo BOOK_CODE="${{ secrets.BOOK_CODE }}" >> .env
           echo CANCEL_CODE="${{ secrets.CANCEL_CODE }}" >> .env
           echo ADD_TO_WAITING_LIST_CODE="${{ secrets.ADD_TO_WAITING_LIST_CODE }}" >> .env
           echo GET_USER_WAITING_LIST_CODE="${{ secrets.GET_USER_WAITING_LIST_CODE }}" >> .env
