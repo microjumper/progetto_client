@@ -30,9 +30,16 @@ import { FileMetadata } from "../../../../../progetto_shared/fileMetadata.type";
 })
 export class UploadComponent {
 
-  readonly uploadUrl = "http://localhost:7071/api/documents/upload";
+  readonly uploadUrl: string;
 
-  constructor(private bookingService: BookingService, private authService: AuthService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) { }
+  constructor(private bookingService: BookingService, private authService: AuthService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) {
+    if(window.location.hostname === "localhost") {
+      this.uploadUrl = "http://localhost:7071/api/documents/upload";
+    }
+    else {
+      this.uploadUrl = `https://appointment-scheduler.azurewebsites.net/api/documents/upload?code=${process.env['UPLOAD_CODE']}`;
+    }
+  }
 
   onBeforeUpload(event: FileBeforeUploadEvent) {
     const subscription: Subscription = this.authService.getActiveAccount()

@@ -10,10 +10,22 @@ import { LegalService } from "../../../../progetto_shared/legalService.type";
 })
 export class DataService {
 
-  constructor(private httpClient: HttpClient) { }
+  private readonly baseUrl: string;
+  private readonly getLegalServicesCode: string;
+
+  constructor(private httpClient: HttpClient) {
+    if(window.location.hostname === "localhost") {
+      this.baseUrl = 'http://localhost:7071/api';
+      this.getLegalServicesCode = '';
+    }
+    else {
+      this.baseUrl = 'https://appointment-scheduler.azurewebsites.net/api';
+      this.getLegalServicesCode = `?code=${process.env['GET_LEGAL_SERVICES_CODE']}`;
+    }
+  }
 
   getLegalServices(): Observable<LegalService[]>
   {
-    return this.httpClient.get<LegalService[]>('http://localhost:7071/api/legalservices');
+    return this.httpClient.get<LegalService[]>(`${this.baseUrl}/legalservices${this.getLegalServicesCode}`);
   }
 }

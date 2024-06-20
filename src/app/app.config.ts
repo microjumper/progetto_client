@@ -61,7 +61,7 @@ export const appConfig: ApplicationConfig = {
 function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: environment.clientId,
+      clientId: window.location.hostname === "localhost" ? environment.CLIENT_ID : process.env['CLIENT_ID']!,
       redirectUri: '/',
       postLogoutRedirectUri: '/'
     },
