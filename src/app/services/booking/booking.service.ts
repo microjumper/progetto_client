@@ -39,7 +39,7 @@ export class BookingService {
       this.baseUrl = 'https://appointment-scheduler.azurewebsites.net/api';
       this.getCurrentDateCode = `?code=${process.env['GET_CURRENT_DATE_CODE']}`;
       this.getAppointmentsCode = `?code=${process.env['GET_APPOINTMENTS_CODE']}`;
-      this.bookCode = `?code=${process.env['BOOKING_CODE']}`;
+      this.bookCode = `?code=${process.env['BOOK_CODE']}`;
       this.cancelCode = `?code=${process.env['CANCEL_CODE']}`;
       this.addToWaitingListCode = `?code=${process.env['ADD_TO_WAITING_LIST_CODE']}`;
       this.getUserWaitingListCode = `?code=${process.env['GET_USER_WAITING_LIST_CODE']}`;
