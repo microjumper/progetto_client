@@ -48,7 +48,7 @@
                   (click)="confirmAppointment(entity.appointment, confirmButton, cancelButton); confirmButton.blur();"
                   class="p-button-success p-button-rounded p-button-text p-button-raised" style="margin-right: 8px">
           </button>
-          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelReservation(entity.id!, confirmButton, cancelButton); cancelButton.blur();"
+          <button #cancelButton pButton type="button" icon="pi pi-trash" (click)="cancelWaitingListEntity(entity.id!, confirmButton, cancelButton); cancelButton.blur();"
                   class="p-button-danger p-button-rounded p-button-text p-button-raised" style="margin-left: 8px">
           </button>
         </td>

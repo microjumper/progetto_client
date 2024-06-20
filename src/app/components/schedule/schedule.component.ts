@@ -103,7 +103,7 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  cancelReservation(entityId: string, confirmButton: HTMLButtonElement, cancelButton: HTMLButtonElement): void {
+  cancelWaitingListEntity(entityId: string, confirmButton: HTMLButtonElement, cancelButton: HTMLButtonElement): void {
     const currentConfirmState = confirmButton.disabled;
 
     this.confirmationService.confirm({

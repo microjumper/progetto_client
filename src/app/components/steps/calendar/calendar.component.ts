@@ -35,8 +35,6 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   calendarOptions: CalendarOptions | undefined;
 
-  private subscription: Subscription | undefined;
-
   constructor(private bookingService: BookingService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit(): void {
@@ -80,14 +78,6 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       },
       lazyFetching: true,
-      eventDataTransform: eventData => {
-        for (let prop in eventData) {
-          if (eventData[prop] === null) {
-            delete eventData[prop];
-          }
-        }
-        return eventData;
-      },
       eventClick: clickInfo => this.handleClick(clickInfo), // click on an event
     };
   }
@@ -101,7 +91,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Errore di selezione',
-        detail: 'Impossibile selezionare una data passata', life: 3000
+        detail: 'Impossibile selezionare una data passata', life: 1500
       });
       return;
     }
@@ -111,7 +101,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Errore di selezione',
-        detail: 'Impossibile selezionare una data già occupata', life: 3000
+        detail: 'Impossibile selezionare una data già occupata', life: 1500
       });
       return;
     }
@@ -124,18 +114,19 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private loadEvents(): void {
-    this.subscription = this.bookingService.appointment$.pipe(
+    const subscription: Subscription = this.bookingService.appointment$.pipe(
       filter(appointment => !!appointment &&!!appointment.legalServiceId), // filters null values
     ).subscribe({
       next: (appointment: Appointment | null) => {
         const calendar = this.calendarComponent?.getApi();
-        calendar?.addEventSource(`http://localhost:7071/api/services/events/${appointment!.legalServiceId}`);
+        calendar?.addEventSource(`http://localhost:7071/api/services/events/bookable/${appointment!.legalServiceId}`);
       },
       error: (error) => {
         console.error(error.message);
 
         this.router.navigate(['booking']);
-      }
+      },
+      complete: () => subscription.unsubscribe()
     });
   }
 
@@ -148,8 +139,6 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-
     const calendar = this.calendarComponent?.getApi();
     calendar?.removeAllEventSources();
     calendar?.removeAllEvents();
