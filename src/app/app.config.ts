@@ -18,7 +18,6 @@ import {
 import { ConfirmationService, MessageService } from "primeng/api";
 
 import { routes } from './app.routes';
-import { environment } from "../environments/environment";
 
 registerLocaleData(localeIt);
 
@@ -61,7 +60,7 @@ export const appConfig: ApplicationConfig = {
 function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: window.location.hostname === "localhost" ? environment.CLIENT_ID : process.env['CLIENT_ID']!,
+      clientId: process.env['CLIENT_ID']!,
       redirectUri: '/',
       postLogoutRedirectUri: '/'
     },
